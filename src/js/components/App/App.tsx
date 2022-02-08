@@ -6,8 +6,6 @@ import Header from '../Header/Header';
 import Search from '../Search/Search';
 import Snack from '../Snack/Snack';
 
-
-
 import './App.scss';
 
 const App: React.FC = () => {

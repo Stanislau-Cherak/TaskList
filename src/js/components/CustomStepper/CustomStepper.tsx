@@ -1,5 +1,14 @@
 import React, { useState } from 'react';
+
+import { useAppDispatch } from '../hooks/hooks';
+
 import { Box, Stepper, Step, StepLabel, Button, Typography, TextField } from '@mui/material';
+
+import uniqid from 'uniqid';
+
+import { addTask } from '../../features/Task/TaskSlice';
+
+import { TaskType, todoListType } from '../../types/types';
 
 const steps = ['Enter task name', 'Create work list', 'Create and ad'];
 
@@ -9,17 +18,25 @@ interface CustomStapperProps {
 
 const CustomStepper: React.FC<CustomStapperProps> = ({ openSnack }) => {
 
+  const dispatch = useAppDispatch();
+
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set<number>());
   const [taskName, setTaskName] = useState('defaultTask');
-  const [todo, setTodo] = useState('');
-  const [todoList, setTodoList] = useState<string[]>([]);
-
+  const [todoDescription, setTodoDescription] = useState('');
+  const [todoList, setTodoList] = useState<todoListType[]>([]);
 
   const handleAddTodo = () => {
-    todoList.push(todo);
+    if (todoDescription) {
+      todoList.push({
+        parentTask: taskName,
+        description: todoDescription,
+        state: 'active',
+        id: uniqid('todo-')
+      })
+    }
     setTodoList(todoList);
-    setTodo('');
+    setTodoDescription('');
   }
 
   const isStepOptional = (step: number) => {
@@ -41,13 +58,14 @@ const CustomStepper: React.FC<CustomStapperProps> = ({ openSnack }) => {
     setSkipped(newSkipped);
 
     if (activeStep === 2) {
-      const task = {
+      const task: TaskType = {
         name: taskName,
         todoList: todoList,
         state: 'active',
-        id: 'id'
+        id: uniqid('task-')
       }
-      console.log(task);
+      dispatch(addTask(task));
+      setTodoList([]);
       openSnack();
     }
   };
@@ -136,8 +154,8 @@ const CustomStepper: React.FC<CustomStapperProps> = ({ openSnack }) => {
                   size='small'
                   color='primary'
                   sx={{ mr: 2, flexGrow: 1 }}
-                  value={todo}
-                  onChange={(e) => setTodo(e.target.value)}
+                  value={todoDescription}
+                  onChange={(e) => setTodoDescription(e.target.value.trim())}
                 />
                 <Button onClick={handleAddTodo}>Add</Button>
               </Box>

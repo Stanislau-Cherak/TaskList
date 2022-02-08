@@ -4,8 +4,6 @@ import SearchIcon from '@mui/icons-material/Search';
 
 import CustomModal from "../CustomModal/CustomModal";
 
-import './Search.scss';
-
 interface SearchProps {
     openSnack: () => void;
 }
