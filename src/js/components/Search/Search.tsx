@@ -4,11 +4,7 @@ import SearchIcon from '@mui/icons-material/Search';
 
 import CustomModal from "../CustomModal/CustomModal";
 
-interface SearchProps {
-    openSnack: () => void;
-}
-
-const Search: React.FC <SearchProps>= ({ openSnack }) => {
+const Search: React.FC = () => {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -63,7 +59,7 @@ const Search: React.FC <SearchProps>= ({ openSnack }) => {
             </Grid>
             {
                 isModalOpen
-                    ? <CustomModal isOpen={isModalOpen} onClose={handleModalClose} openSnack={openSnack} />
+                    ? <CustomModal isOpen={isModalOpen} onClose={handleModalClose} />
                     : null
             }
         </>

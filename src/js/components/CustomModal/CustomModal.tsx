@@ -14,18 +14,17 @@ const style = {
   borderRadius: '5px',
   boxShadow: 24,
   p: 4,
-  display:'flex',
+  display: 'flex',
   flexDirection: 'column',
-  alignItems: 'flex-end',  
+  alignItems: 'flex-end',
 };
 
 interface CustomModalProps {
   isOpen: boolean;
-  openSnack:()=>void;
   onClose: () => void;
 }
 
-const CustomModal: React.FC<CustomModalProps> = ({ isOpen, onClose, openSnack }) => {
+const CustomModal: React.FC<CustomModalProps> = ({ isOpen, onClose }) => {
 
   return (
     <div>
@@ -42,7 +41,7 @@ const CustomModal: React.FC<CustomModalProps> = ({ isOpen, onClose, openSnack })
       >
         <Fade in={isOpen}>
           <Box sx={style}>
-            <CustomStepper openSnack={openSnack}/>
+            <CustomStepper />
             <Button
               variant='contained'
               onClick={onClose}

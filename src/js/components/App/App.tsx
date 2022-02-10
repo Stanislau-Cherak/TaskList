@@ -1,4 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
+
+import { useAppSelector, useAppDispatch } from '../hooks/hooks';
+
+import { showMessage } from '../../features/Task/MessageSlice';
 
 import { Container } from '@mui/material';
 
@@ -10,25 +14,23 @@ import './App.scss';
 
 const App: React.FC = () => {
 
-    const [isSnackOpen, setIsSnackOpen] = useState(false);
+    const dispatch = useAppDispatch();
 
-    const handleSnackOpen = () => {
-        setIsSnackOpen(true);
-    }
+    const message = useAppSelector(state => state.message);
 
     return (
         <>
             <Container maxWidth="lg">
                 <Header />
-                <Search openSnack={handleSnackOpen} />
+                <Search />
 
             </Container>
             <Snack
-                isOpen={isSnackOpen}
-                text={'New task succesfully added!'}
-                duration={3000} 
-                severity={'success'}
-                onClose={() => setIsSnackOpen(false)}
+                isOpen={message.show}
+                message={message.message}
+                duration={message.duration}
+                severity={message.severity}
+                onClose={() => dispatch(showMessage({ show: false }))}
             />
         </>
     )

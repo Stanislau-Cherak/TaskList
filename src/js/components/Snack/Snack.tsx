@@ -5,13 +5,13 @@ import { AlertColor } from "@mui/material/Alert"
 
 interface SnackProps {
   isOpen: boolean;
-  text: string;
+  message: string;
   duration: number;
   severity: AlertColor;
   onClose: () => void;
 }
 
-const Snack: React.FC<SnackProps> = ({ isOpen, text, duration, severity, onClose }) => {
+const Snack: React.FC<SnackProps> = ({ isOpen, message, duration, severity, onClose }) => {
   return (
     <Snackbar
       open={isOpen}
@@ -21,7 +21,7 @@ const Snack: React.FC<SnackProps> = ({ isOpen, text, duration, severity, onClose
       <Alert
         severity={severity}
       >
-        {text}
+        {message}
       </Alert>
     </Snackbar>
   )

@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 
 import { taskReducer } from '../features/Task/TaskSlice';
+import { messageReducer } from '../features/Task/MessageSlice';
 
 export const store = configureStore({
   reducer: {
-      tasks: taskReducer
+    tasks: taskReducer,
+    message: messageReducer
   }
 });
 

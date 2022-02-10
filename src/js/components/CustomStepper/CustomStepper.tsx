@@ -7,16 +7,13 @@ import { Box, Stepper, Step, StepLabel, Button, Typography, TextField } from '@m
 import uniqid from 'uniqid';
 
 import { addTask } from '../../features/Task/TaskSlice';
+import { setMessage, showMessage } from '../../features/Task/MessageSlice';
 
 import { TaskType, todoListType } from '../../types/types';
 
 const steps = ['Enter task name', 'Create work list', 'Create and ad'];
 
-interface CustomStapperProps {
-  openSnack: () => void;
-}
-
-const CustomStepper: React.FC<CustomStapperProps> = ({ openSnack }) => {
+const CustomStepper: React.FC = () => {
 
   const dispatch = useAppDispatch();
 
@@ -65,8 +62,8 @@ const CustomStepper: React.FC<CustomStapperProps> = ({ openSnack }) => {
         id: uniqid('task-')
       }
       dispatch(addTask(task));
+      dispatch(setMessage({ severity: 'success', message: 'New task succesfully added!', show: true }))
       setTodoList([]);
-      openSnack();
     }
   };
 
