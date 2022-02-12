@@ -4,12 +4,13 @@ import { useAppDispatch } from '../hooks/hooks';
 
 import { Box, Stepper, Step, StepLabel, Button, Typography, TextField } from '@mui/material';
 
-import uniqid from 'uniqid';
-
 import { addTask } from '../../features/Task/TaskSlice';
-import { setMessage, showMessage } from '../../features/Task/MessageSlice';
+import { setMessage } from '../../features/Task/MessageSlice';
 
-import { TaskType, todoListType } from '../../types/types';
+import { TaskType, todoType, todoListType } from '../../types/types';
+
+import { getTask } from '../../helpers/getTask';
+import { getTodo } from '../../helpers/getTodo';
 
 const steps = ['Enter task name', 'Create work list', 'Create and ad'];
 
@@ -19,21 +20,16 @@ const CustomStepper: React.FC = () => {
 
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set<number>());
-  const [taskName, setTaskName] = useState('defaultTask');
-  const [todoDescription, setTodoDescription] = useState('');
-  const [todoList, setTodoList] = useState<todoListType[]>([]);
+  const [task, setTask] = useState<TaskType>(getTask());
+  const [todo, setTodo] = useState<todoType>(getTodo('empty'));
+  const [todoList, setTodoList] = useState<todoListType>([]);
 
   const handleAddTodo = () => {
-    if (todoDescription) {
-      todoList.push({
-        parentTask: taskName,
-        description: todoDescription,
-        state: 'active',
-        id: uniqid('todo-')
-      })
+    if (todo.description) {
+      todoList.push(todo)
     }
     setTodoList(todoList);
-    setTodoDescription('');
+    setTodo(getTodo('empty'));
   }
 
   const isStepOptional = (step: number) => {
@@ -55,12 +51,6 @@ const CustomStepper: React.FC = () => {
     setSkipped(newSkipped);
 
     if (activeStep === 2) {
-      const task: TaskType = {
-        name: taskName,
-        todoList: todoList,
-        state: 'active',
-        id: uniqid('task-')
-      }
       dispatch(addTask(task));
       dispatch(setMessage({ severity: 'success', message: 'New task succesfully added!', show: true }))
       setTodoList([]);
@@ -134,9 +124,9 @@ const CustomStepper: React.FC = () => {
                 size='small'
                 color='primary'
                 fullWidth
-                value={taskName}
+                value={task.name}
                 sx={{ mr: 2 }}
-                onChange={(e) => setTaskName(e.target.value)}
+                onChange={(e) => setTask(getTask(e.target.value))}
               />
               : null
           }
@@ -151,8 +141,8 @@ const CustomStepper: React.FC = () => {
                   size='small'
                   color='primary'
                   sx={{ mr: 2, flexGrow: 1 }}
-                  value={todoDescription}
-                  onChange={(e) => setTodoDescription(e.target.value.trim())}
+                  value={todo.description}
+                  onChange={(e) => setTodo(getTodo(task.id, e.target.value.trim()))}
                 />
                 <Button onClick={handleAddTodo}>Add</Button>
               </Box>

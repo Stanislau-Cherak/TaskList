@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { useAppSelector, useAppDispatch } from '../hooks/hooks';
 
@@ -8,6 +8,7 @@ import { Container } from '@mui/material';
 
 import Header from '../Header/Header';
 import Search from '../Search/Search';
+import RadioButtons from '../RadioButtons/RadioButtons';
 import Snack from '../Snack/Snack';
 
 import './App.scss';
@@ -18,11 +19,18 @@ const App: React.FC = () => {
 
     const message = useAppSelector(state => state.message);
 
+    const [preFilter, setPreFilter] = useState<string>('all');
+
+    const preFilterChange = (value: string): void => {
+        setPreFilter(value);
+    }
+
     return (
         <>
             <Container maxWidth="lg">
-                <Header />
+                <Header onClick={preFilterChange} />
                 <Search />
+                <RadioButtons preFilter={preFilter} onChange={preFilterChange} />
 
             </Container>
             <Snack
