@@ -9,6 +9,7 @@ import { Container } from '@mui/material';
 import Header from '../Header/Header';
 import Search from '../Search/Search';
 import RadioButtons from '../RadioButtons/RadioButtons';
+import TaskList from '../TaskList/TaskList';
 import Snack from '../Snack/Snack';
 
 import './App.scss';
@@ -31,6 +32,7 @@ const App: React.FC = () => {
                 <Header onClick={preFilterChange} />
                 <Search />
                 <RadioButtons preFilter={preFilter} onChange={preFilterChange} />
+                <TaskList/>
 
             </Container>
             <Snack
