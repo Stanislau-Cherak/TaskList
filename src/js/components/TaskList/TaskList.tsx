@@ -4,25 +4,34 @@ import { useAppSelector } from '../hooks/hooks';
 
 import { Box } from '@mui/material';
 
-import { TaskType } from "../../types/types";
+import { TaskType, PreFilterType } from "../../types/types";
 
 import Task from "../Task/Task";
 
-const TaskList: React.FC = () => {
+interface TasksListProps {
+  preFilter: PreFilterType,
+}
+
+const TaskList: React.FC<TasksListProps> = ({ preFilter }) => {
 
   const tasks: TaskType[] = useAppSelector(state => state.tasks);
 
+  const prefilteredTasks = (preFilter === 'all'
+    ? tasks
+    : tasks.filter((task) => task.status === preFilter)
+  );
+
   return (
     <Box
-    sx={{
-      display: 'flex',
-      flexDirection: 'column'
-    }}    
+      sx={{
+        display: 'flex',
+        flexDirection: 'column'
+      }}
     >
       {
-        tasks.map((task: TaskType) => {
+        prefilteredTasks.map((task: TaskType) => {
           return (
-            <Task key={task.id} name={task.name} state={task.state} />
+            <Task key={task.id} {...task} />
           )
         })
       }

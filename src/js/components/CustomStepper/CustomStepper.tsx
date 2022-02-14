@@ -7,10 +7,10 @@ import { Box, Stepper, Step, StepLabel, Button, Typography, TextField } from '@m
 import { addTask } from '../../features/Task/TaskSlice';
 import { setMessage } from '../../features/Task/MessageSlice';
 
-import { TaskType, todoType, todoListType } from '../../types/types';
+import { TaskType, TodoType, TodoListType } from '../../types/types';
 
-import { getTask } from '../../helpers/getTask';
-import { getTodo } from '../../helpers/getTodo';
+import { createTask } from '../../helpers/createTask';
+import { createTodo } from '../../helpers/createTodo';
 
 const steps = ['Enter task name', 'Create work list', 'Create and ad'];
 
@@ -20,16 +20,17 @@ const CustomStepper: React.FC = () => {
 
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set<number>());
-  const [task, setTask] = useState<TaskType>(getTask());
-  const [todo, setTodo] = useState<todoType>(getTodo('empty'));
-  const [todoList, setTodoList] = useState<todoListType>([]);
+  const [task, setTask] = useState<TaskType>(createTask());
+  const [todo, setTodo] = useState<TodoType>(createTodo('empty'));
+  const [todoList, setTodoList] = useState<TodoListType>([]);
 
   const handleAddTodo = () => {
     if (todo.description) {
+      todo.description.trim();
       todoList.push(todo)
     }
     setTodoList(todoList);
-    setTodo(getTodo('empty'));
+    setTodo(createTodo('empty'));
   }
 
   const isStepOptional = (step: number) => {
@@ -51,6 +52,8 @@ const CustomStepper: React.FC = () => {
     setSkipped(newSkipped);
 
     if (activeStep === 2) {
+      task.name.trim();
+      task.todoList=[...todoList];
       dispatch(addTask(task));
       dispatch(setMessage({ severity: 'success', message: 'New task succesfully added!', show: true }))
       setTodoList([]);
@@ -126,7 +129,7 @@ const CustomStepper: React.FC = () => {
                 fullWidth
                 value={task.name}
                 sx={{ mr: 2 }}
-                onChange={(e) => setTask(getTask(e.target.value))}
+                onChange={(e) => setTask(createTask(e.target.value))}
               />
               : null
           }
@@ -142,7 +145,7 @@ const CustomStepper: React.FC = () => {
                   color='primary'
                   sx={{ mr: 2, flexGrow: 1 }}
                   value={todo.description}
-                  onChange={(e) => setTodo(getTodo(task.id, e.target.value.trim()))}
+                  onChange={(e) => setTodo(createTodo(task.id, e.target.value))}
                 />
                 <Button onClick={handleAddTodo}>Add</Button>
               </Box>

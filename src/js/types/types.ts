@@ -1,15 +1,19 @@
-export type todoType = {
+export type StatusType = 'active' | 'done'
+
+export type PreFilterType = 'all' | StatusType;
+
+export type TodoType = {
   parentTaskID: string;
   description: string;
-  state: 'active' | 'done';
+  status: StatusType;
   id: string;
 }
 
-export type todoListType = todoType[];
+export type TodoListType = TodoType[];
 
 export type TaskType = {
   name: string;
-  todoList: todoListType;
-  state: 'active' | 'done';
+  todoList: TodoListType;
+  status: StatusType;
   id: string;
 }

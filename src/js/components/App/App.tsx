@@ -6,6 +6,8 @@ import { showMessage } from '../../features/Task/MessageSlice';
 
 import { Container } from '@mui/material';
 
+import { PreFilterType } from '../../types/types';
+
 import Header from '../Header/Header';
 import Search from '../Search/Search';
 import RadioButtons from '../RadioButtons/RadioButtons';
@@ -19,10 +21,10 @@ const App: React.FC = () => {
     const dispatch = useAppDispatch();
 
     const message = useAppSelector(state => state.message);
+    
+    const [preFilter, setPreFilter] = useState<PreFilterType>('all');
 
-    const [preFilter, setPreFilter] = useState<string>('all');
-
-    const preFilterChange = (value: string): void => {
+    const preFilterChange = (value: PreFilterType): void => {
         setPreFilter(value);
     }
 
@@ -32,7 +34,7 @@ const App: React.FC = () => {
                 <Header onClick={preFilterChange} />
                 <Search />
                 <RadioButtons preFilter={preFilter} onChange={preFilterChange} />
-                <TaskList/>
+                <TaskList preFilter={preFilter}/>
 
             </Container>
             <Snack

@@ -1,16 +1,18 @@
 import React from 'react';
 
-import { Radio, RadioGroup, FormControlLabel, Box } from '@mui/material';
+import { Radio, RadioGroup, FormControlLabel } from '@mui/material';
+
+import { PreFilterType } from '../../types/types';
 
 interface RadioButtonsProps {
-  preFilter: string,
-  onChange: (value: string) => void
+  preFilter: PreFilterType,
+  onChange: (value: PreFilterType) => void
 }
 
 const RadioButtons: React.FC<RadioButtonsProps> = ({ preFilter, onChange }) => {
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    onChange((event.target as HTMLInputElement).value);
+  const handleChange = (event): void => {
+    onChange(event.target.value);
   };
 
   return (

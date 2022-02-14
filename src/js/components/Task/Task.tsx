@@ -1,22 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
+
+import { useAppDispatch } from "../hooks/hooks";
 
 import { Box, Paper, IconButton, Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CheckIcon from '@mui/icons-material/Check';
 
-import { green, orange } from '@mui/material/colors';
+import { blue, green, orange } from '@mui/material/colors';
 
-const greenColor = green[500];
-const orangeColor = orange[800];
+import { deleteTask, changeTaskStatus } from "../../features/Task/TaskSlice";
+
+import { StatusType } from "../../types/types";
+
+const doneColor = green[500];
+const activeColor = orange[800];
+const primaryColor = blue[500];
 
 interface TaskProps {
   name: string,
-  state: 'active' | 'done',
+  status: StatusType,
+  id: string,
 }
 
-const Task: React.FC<TaskProps> = ({ name, state }) => {
+const Task: React.FC<TaskProps> = ({ name, status, id }) => {
 
-  const color = (state === 'done' ? greenColor : orangeColor);
+  const dispatch = useAppDispatch();
+
+  const [currentStatus, setCurrentStatus] = useState<StatusType>(status);
+
+  const handleStatusChange = (): void => {
+    const newStatus: StatusType = (status === 'active' ? 'done' : 'active');
+    setCurrentStatus(newStatus);
+    dispatch(changeTaskStatus({ id, status: newStatus }));
+  }
+
+  const color = (status === 'done' ? doneColor : activeColor);
 
   return (
     <Box
@@ -49,11 +67,13 @@ const Task: React.FC<TaskProps> = ({ name, state }) => {
         </Typography>
         <IconButton
           color='inherit'
+          onClick={handleStatusChange}
         >
           <CheckIcon />
         </IconButton>
         <IconButton
           color='inherit'
+          onClick={() => dispatch(deleteTask(id))}
         >
           <DeleteIcon />
         </IconButton>
