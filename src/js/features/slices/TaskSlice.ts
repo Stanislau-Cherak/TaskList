@@ -8,7 +8,7 @@ const taskSlice = createSlice({
       state.push({ ...action.payload });
     },
     deleteTask(state, action) {
-      return state.filter((task) => task.id !== action.payload)
+      return state.filter((task) => task.id !== action.payload.id);
     },
     editTask(state, action) {
       state.forEach((task) => {
@@ -18,16 +18,16 @@ const taskSlice = createSlice({
         }
       });
     },
-    changeTaskStatus(state, action) {
+    completeTask(state, action) {
       state.forEach((task) => {
         if (task.id === action.payload.id) {
-          task.status = action.payload.status;
-          task.todoList.forEach(todo=>todo.status=action.payload.status);          
+          task.status = 'done';
+          task.todoList.forEach(todo=>todo.status='done');          
         }
       });
     }
   },
 });
 
-export const { addTask, deleteTask, editTask, changeTaskStatus } = taskSlice.actions;
+export const { addTask, deleteTask, editTask, completeTask } = taskSlice.actions;
 export const { reducer: taskReducer } = taskSlice;

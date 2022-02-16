@@ -1,19 +1,25 @@
 import React, { useState } from "react";
-import { Grid, Button, TextField, InputAdornment, Box } from "@mui/material";
+import { Grid, Button, TextField, InputAdornment, Box, IconButton } from "@mui/material";
+import AutorenewIcon from '@mui/icons-material/Autorenew';
 import SearchIcon from '@mui/icons-material/Search';
 
-import CustomModal from "../CustomModal/CustomModal";
+interface SearchProps {
+    searchMask: string,
+    onSearchChange: (value: string) => void,
+    onModalOpen: ()=>void
+}
 
-const Search: React.FC = () => {
+const Search: React.FC<SearchProps> = ({ searchMask, onSearchChange, onModalOpen }) => {
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [mask, setMask] = useState<string>(searchMask);
 
-    const handleModalOpen = () => {
-        setIsModalOpen(true);
-    }
+    const handleModalOpen=()=>{
+        onModalOpen();
+    };
 
-    const handleModalClose = () => {
-        setIsModalOpen(false);
+    const handleSearchChange = (event) => {
+        setMask(event.target.value);
+        onSearchChange(event.target.value.trim());
     }
 
     return (
@@ -37,6 +43,16 @@ const Search: React.FC = () => {
 
                 <Grid item xs={12} sm={9} md={10}>
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <IconButton
+                            size="large"
+                            color='primary'
+                            sx={{
+                                mr: 2
+                            }}
+                            onClick={() => onSearchChange('')}
+                        >
+                            <AutorenewIcon />
+                        </IconButton>
                         <TextField
                             id='outlined-search'
                             label='Search task'
@@ -52,16 +68,18 @@ const Search: React.FC = () => {
                             color='primary'
                             fullWidth
                             sx={{ mr: 2 }}
+                            value={mask}
+                            onChange={handleSearchChange}
                         />
-                        <Button variant='contained'>Search</Button>
+                        <Button
+                            variant='contained'
+                            onClick={() => setMask('')}
+                        >
+                            Search
+                        </Button>
                     </Box>
                 </Grid>
-            </Grid>
-            {
-                isModalOpen
-                    ? <CustomModal isOpen={isModalOpen} onClose={handleModalClose} />
-                    : null
-            }
+            </Grid>            
         </>
     )
 }

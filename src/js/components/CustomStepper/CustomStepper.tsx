@@ -4,8 +4,8 @@ import { useAppDispatch } from '../hooks/hooks';
 
 import { Box, Stepper, Step, StepLabel, Button, Typography, TextField } from '@mui/material';
 
-import { addTask } from '../../features/Task/TaskSlice';
-import { setMessage } from '../../features/Task/MessageSlice';
+import { addTask } from '../../features/slices/TaskSlice';
+import { setMessage } from '../../features/slices/MessageSlice';
 
 import { TaskType, TodoType, TodoListType } from '../../types/types';
 

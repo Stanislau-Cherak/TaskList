@@ -8,7 +8,8 @@ import CheckIcon from '@mui/icons-material/Check';
 
 import { blue, green, orange } from '@mui/material/colors';
 
-import { deleteTask, changeTaskStatus } from "../../features/Task/TaskSlice";
+import { deleteTask, completeTask } from "../../features/slices/TaskSlice";
+import { setMessage } from '../../features/slices/MessageSlice';
 
 import { StatusType } from "../../types/types";
 
@@ -26,12 +27,14 @@ const Task: React.FC<TaskProps> = ({ name, status, id }) => {
 
   const dispatch = useAppDispatch();
 
-  const [currentStatus, setCurrentStatus] = useState<StatusType>(status);
+  const handleCompleteTask = (): void => {
+    dispatch(completeTask({ id }));
+    dispatch(setMessage({ severity: 'warning', message: 'You marked the task as completed!', show: true }));
+  }
 
-  const handleStatusChange = (): void => {
-    const newStatus: StatusType = (status === 'active' ? 'done' : 'active');
-    setCurrentStatus(newStatus);
-    dispatch(changeTaskStatus({ id, status: newStatus }));
+  const handleDeleteTask = (): void => {
+    dispatch(deleteTask({ id }));
+    dispatch(setMessage({ severity: 'error', message: 'You have deleted the task!', show: true }));
   }
 
   const color = (status === 'done' ? doneColor : activeColor);
@@ -65,15 +68,19 @@ const Task: React.FC<TaskProps> = ({ name, status, id }) => {
         >
           {name}
         </Typography>
+        {
+          (status === 'active')
+          &&
+          <IconButton
+            color='inherit'
+            onClick={handleCompleteTask}
+          >
+            <CheckIcon />
+          </IconButton>
+        }
         <IconButton
           color='inherit'
-          onClick={handleStatusChange}
-        >
-          <CheckIcon />
-        </IconButton>
-        <IconButton
-          color='inherit'
-          onClick={() => dispatch(deleteTask(id))}
+          onClick={handleDeleteTask}
         >
           <DeleteIcon />
         </IconButton>

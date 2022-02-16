@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import { taskReducer } from '../features/Task/TaskSlice';
-import { messageReducer } from '../features/Task/MessageSlice';
+import { taskReducer } from '../features/slices/TaskSlice';
+import { messageReducer } from '../features/slices/MessageSlice';
 
 export const store = configureStore({
   reducer: {
