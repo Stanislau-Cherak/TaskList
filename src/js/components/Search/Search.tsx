@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import { Grid, Button, TextField, InputAdornment, Box, IconButton } from "@mui/material";
 import AutorenewIcon from '@mui/icons-material/Autorenew';
 import SearchIcon from '@mui/icons-material/Search';
@@ -6,20 +8,28 @@ import SearchIcon from '@mui/icons-material/Search';
 interface SearchProps {
     searchMask: string,
     onSearchChange: (value: string) => void,
-    onModalOpen: ()=>void
+    onModalOpen: () => void
 }
 
 const Search: React.FC<SearchProps> = ({ searchMask, onSearchChange, onModalOpen }) => {
 
+    const navigate = useNavigate();
+
     const [mask, setMask] = useState<string>(searchMask);
 
-    const handleModalOpen=()=>{
+    const handleModalOpen = () => {
         onModalOpen();
     };
 
     const handleSearchChange = (event) => {
         setMask(event.target.value);
         onSearchChange(event.target.value.trim());
+    }
+
+    const handleRenew = () => {
+        onSearchChange('');
+        setMask('');
+        navigate('/');
     }
 
     return (
@@ -49,7 +59,7 @@ const Search: React.FC<SearchProps> = ({ searchMask, onSearchChange, onModalOpen
                             sx={{
                                 mr: 2
                             }}
-                            onClick={() => onSearchChange('')}
+                            onClick={handleRenew}
                         >
                             <AutorenewIcon />
                         </IconButton>
@@ -79,7 +89,7 @@ const Search: React.FC<SearchProps> = ({ searchMask, onSearchChange, onModalOpen
                         </Button>
                     </Box>
                 </Grid>
-            </Grid>            
+            </Grid>
         </>
     )
 }

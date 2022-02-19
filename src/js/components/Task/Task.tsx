@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
 import { useAppDispatch } from "../hooks/hooks";
 
@@ -11,6 +12,8 @@ import { blue, green, orange } from '@mui/material/colors';
 import { deleteTask, completeTask } from "../../features/slices/TaskSlice";
 import { setMessage } from '../../features/slices/MessageSlice';
 
+import { convertToLink } from "../../helpers/convertToLink";
+
 import { StatusType } from "../../types/types";
 
 const doneColor = green[500];
@@ -21,11 +24,13 @@ interface TaskProps {
   name: string,
   status: StatusType,
   id: string,
+  selected?: boolean,
 }
 
-const Task: React.FC<TaskProps> = ({ name, status, id }) => {
+const Task: React.FC<TaskProps> = ({ name, status, id, selected }) => {
 
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const handleCompleteTask = (): void => {
     dispatch(completeTask({ id }));
@@ -35,14 +40,22 @@ const Task: React.FC<TaskProps> = ({ name, status, id }) => {
   const handleDeleteTask = (): void => {
     dispatch(deleteTask({ id }));
     dispatch(setMessage({ severity: 'error', message: 'You have deleted the task!', show: true }));
+    if (selected) {
+      navigate('/');
+    }
   }
 
-  const color = (status === 'done' ? doneColor : activeColor);
+  const hadleSelectTask = () => {
+    navigate(`/Task/${convertToLink(name)}`, { state: id });
+  }
+
+  const color = selected ? primaryColor : (status === 'done' ? doneColor : activeColor);
 
   return (
     <Box
       sx={{
-        mb: 3
+        mb: 3,
+        cursor: 'pointer'
       }}
     >
       <Paper
@@ -65,6 +78,7 @@ const Task: React.FC<TaskProps> = ({ name, status, id }) => {
             py: 1,
             flexGrow: 1,
           }}
+          onClick={hadleSelectTask}
         >
           {name}
         </Typography>

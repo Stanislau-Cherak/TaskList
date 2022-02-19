@@ -11,12 +11,13 @@ import { PreFilterType } from '../../types/types';
 import Header from '../Header/Header';
 import Search from '../Search/Search';
 import RadioButtons from '../RadioButtons/RadioButtons';
-import TaskList from '../TaskList/TaskList';
+import WorkArea from '../WorkArea/WorkArea';
 import Snack from '../Snack/Snack';
 import CustomModal from "../CustomModal/CustomModal";
 
 
 import './App.scss';
+import { Route, Routes } from 'react-router-dom';
 
 const App: React.FC = () => {
 
@@ -50,7 +51,12 @@ const App: React.FC = () => {
                 <Header onClick={preFilterChange} />
                 <Search searchMask={searchMask} onSearchChange={searchMaskChange} onModalOpen={handleModalOpen} />
                 <RadioButtons preFilter={preFilter} onChange={preFilterChange} />
-                <TaskList preFilter={preFilter} searchMask={searchMask} />
+
+                <Routes>
+                    <Route path='/' element={<WorkArea preFilter={preFilter} searchMask={searchMask} />}>
+                        <Route path='Task/:name' element={<WorkArea preFilter={preFilter} searchMask={searchMask} />} />
+                    </Route>
+                </Routes>
 
             </Container>
 
