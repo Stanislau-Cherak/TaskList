@@ -1,25 +1,36 @@
 import React from "react";
 
+import { useAppDispatch } from "../hooks/hooks";
+
 import { Box, Paper, IconButton, Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CheckIcon from '@mui/icons-material/Check';
 
+import { completeTodo, deleteTodo } from "../../features/slices/TaskSlice";
+import { setMessage } from "../../features/slices/MessageSlice";
+
 import { green, orange } from '@mui/material/colors';
 
-import { StatusType } from "../../types/types";
+import { TodoType } from "../../types/types";
 
 const doneColor = green[500];
-const activeColor = orange[800];
+const activeColor = orange[500];
 
-interface TodoProps {
-  description: string,
-  status: StatusType,
-  id: string,
-}
+const Todo: React.FC<TodoType> = ({ parentTaskID, description, status, id }) => {
 
-const Todo: React.FC<TodoProps> = ({ description, status, id }) => {
+  const dispatch = useAppDispatch();
 
   const color = (status === 'done' ? doneColor : activeColor);
+
+  const handleDeleteTodo = (): void => {
+    dispatch(deleteTodo({ parentTaskID: parentTaskID, id: id }))
+    dispatch(setMessage({ severity: 'error', message: 'You have deleted the job!', show: true }));
+  }
+
+  const handleCompleteTodo = (): void => {
+    dispatch(completeTodo({ parentTaskID: parentTaskID, id: id }));
+    dispatch(setMessage({ severity: 'warning', message: 'You marked the job as completed!', show: true }));
+  }
 
   return (
     <Box
@@ -56,14 +67,14 @@ const Todo: React.FC<TodoProps> = ({ description, status, id }) => {
           &&
           <IconButton
             color='inherit'
-            onClick={() => console.log('check')}
+            onClick={handleCompleteTodo}
           >
             <CheckIcon />
           </IconButton>
         }
         <IconButton
           color='inherit'
-          onClick={()=>console.log('delete')}
+          onClick={handleDeleteTodo}
         >
           <DeleteIcon />
         </IconButton>

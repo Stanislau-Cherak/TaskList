@@ -17,7 +17,7 @@ import { convertToLink } from "../../helpers/convertToLink";
 import { StatusType } from "../../types/types";
 
 const doneColor = green[500];
-const activeColor = orange[800];
+const activeColor = orange[500];
 const primaryColor = blue[500];
 
 interface TaskProps {
