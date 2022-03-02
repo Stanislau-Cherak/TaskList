@@ -1,7 +1,7 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
 
-import { useAppSelector } from "../hooks/hooks";
+import { useAppSelector } from "../../hooks/hooks";
 
 import { Grid, Box, Typography } from "@mui/material";
 

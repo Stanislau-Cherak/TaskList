@@ -1,6 +1,6 @@
 import React from "react";
 
-import { useAppDispatch } from "../hooks/hooks";
+import { useAppDispatch } from "../../hooks/hooks";
 
 import { Box, Paper, IconButton, Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';

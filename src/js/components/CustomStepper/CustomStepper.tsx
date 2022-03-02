@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { useAppDispatch } from '../hooks/hooks';
+import { useAppDispatch } from '../../hooks/hooks';
 
 import { Box, Stepper, Step, StepLabel, Button, Typography, TextField } from '@mui/material';
 

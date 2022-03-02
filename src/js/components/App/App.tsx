@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import { Route, Routes } from 'react-router-dom';
 
-import { useAppSelector, useAppDispatch } from '../hooks/hooks';
+import { useAppSelector, useAppDispatch } from '../../hooks/hooks';
 
 import { showMessage } from '../../features/slices/MessageSlice';
 
@@ -15,9 +16,7 @@ import WorkArea from '../WorkArea/WorkArea';
 import Snack from '../Snack/Snack';
 import CustomModal from "../CustomModal/CustomModal";
 
-
 import './App.scss';
-import { Route, Routes } from 'react-router-dom';
 
 const App: React.FC = () => {
 

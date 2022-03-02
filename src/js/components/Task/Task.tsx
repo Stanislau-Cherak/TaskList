@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-import { useAppDispatch } from "../hooks/hooks";
+import { useAppDispatch } from "../../hooks/hooks";
 
 import { Box, Paper, IconButton, Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -18,7 +18,7 @@ import { StatusType } from "../../types/types";
 
 const doneColor = green[500];
 const activeColor = orange[500];
-const primaryColor = blue[500];
+const primaryColor = blue[700];
 
 interface TaskProps {
   name: string,
