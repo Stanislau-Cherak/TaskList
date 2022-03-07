@@ -4,6 +4,7 @@ import { Box, Typography } from '@mui/material';
 
 import Todo from "../Todo/Todo";
 import Progress from "../Progress/Progress";
+import AddTodo from "../AddTodo/AddTodo";
 
 import { TaskType, TodoListType, TodoType } from "../../types/types";
 
@@ -16,11 +17,15 @@ const TodoList: React.FC<TodoListProps> = ({ selectedTask, selected }) => {
 
   const todos: TodoListType = selectedTask?.todoList;
 
-  const completedTodos: TodoListType = selectedTask?.todoList.filter((todo) => {
-    return todo.status === 'done'
+  const activeTodos: TodoListType = selectedTask?.todoList.filter((todo) => {
+    return todo.status === 'active';
   });
 
-  const progress=(completedTodos?.length/todos?.length)*100;
+  const completedTodos: TodoListType = selectedTask?.todoList.filter((todo) => {
+    return todo.status === 'done';
+  });
+
+  const progress = (completedTodos?.length / todos?.length) * 100;
 
   return (
 
@@ -37,28 +42,44 @@ const TodoList: React.FC<TodoListProps> = ({ selectedTask, selected }) => {
             todos.length != 0
               ?
               <>
-              <Progress value={progress}/>
-              {todos?.map((todo: TodoType) => {
-                return (
-                  <Todo key={todo.id} {...todo} />
-                )
-              })}
+                <Typography
+                  variant='h5'
+                  component='span'
+                  sx={{
+                    mb: 2
+                  }}
+                >
+                  Complete:
+                </Typography>
+                <Progress value={progress} />
+                <AddTodo taskID={selectedTask?.id} />
+                {[...activeTodos, ...completedTodos].map((todo: TodoType) => {
+                  return (
+                    <Todo key={todo.id} {...todo} />
+                  )
+                })}
               </>
               :
+              <>
               <Typography
                 variant='h5'
                 component='span'
                 textAlign={'center'}
+                sx={{
+                  mb: 3,
+                }}
               >
                 Job list is empty. Please, add some job.
               </Typography>
+              <AddTodo taskID={selectedTask?.id} />
+              </>
           }
         </>
         :
         <Typography
           variant='h5'
           component='span'
-          textAlign={'center'}
+          textAlign={'center'}          
         >
           Please, choose task.
         </Typography>

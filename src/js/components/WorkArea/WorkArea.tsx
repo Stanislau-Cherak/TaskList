@@ -33,12 +33,12 @@ const WorkArea: React.FC<WorkAreaProps> = ({ preFilter, searchMask }) => {
   const postfilteredTasks = prefilteredTasks.filter((task) => {
     return task.name.toLowerCase().includes(searchMask.toLowerCase())
   }
-  );
+  );  
 
   return (
     <Box>
 
-      {tasks.length!=0
+      {tasks.length != 0
         ?
         <Grid
           container
@@ -47,11 +47,11 @@ const WorkArea: React.FC<WorkAreaProps> = ({ preFilter, searchMask }) => {
         >
 
           <Grid item xs={6} md={4}>
-            <TaskList 
-            filteredTasks={postfilteredTasks} 
-            selectedTask={selectedTask} 
-            selected={selected} 
-            prefilter={preFilter} 
+            <TaskList
+              filteredTasks={postfilteredTasks}
+              selectedTask={selectedTask}
+              selected={selected}
+              prefilter={preFilter}
             />
           </Grid>
 
@@ -71,6 +71,7 @@ const WorkArea: React.FC<WorkAreaProps> = ({ preFilter, searchMask }) => {
 
     </Box>
   )
+
 }
 
 export default WorkArea;

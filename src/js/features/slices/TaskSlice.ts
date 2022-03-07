@@ -9,7 +9,7 @@ const taskSlice = createSlice({
     },
     deleteTask(state, action) {
       return state.filter((task) => task.id !== action.payload.id);
-    },    
+    },
     completeTask(state, action) {
       state.forEach((task) => {
         if (task.id === action.payload.id) {
@@ -18,6 +18,11 @@ const taskSlice = createSlice({
         }
       });
     },
+    addTodo(state, action) {
+      const currentTask = state.find(task => task.id === action.payload.parentTaskID);
+      currentTask.todoList.push({ ...action.payload });
+      currentTask.status = 'active';
+    },
     deleteTodo(state, action) {
       const currentTask = state.find(task => task.id === action.payload.parentTaskID);
       const currentTodos = currentTask.todoList.filter((todo) => {
@@ -25,9 +30,19 @@ const taskSlice = createSlice({
       })
       if (currentTodos.length !== 0) {
         currentTask.todoList = currentTodos;
+      } else {
+        currentTask.todoList = [];
+        currentTask.status = 'active';
         return;
       }
-      currentTask.todoList = [];
+      const completedTodoList = currentTask.todoList.filter((todo) => {
+        return todo.status === 'done';
+      });
+      if (completedTodoList.length === currentTask.todoList.length) {
+        currentTask.status = 'done';
+      } else {
+        currentTask.status = 'active';
+      };
     },
     completeTodo(state, action) {
       const currentTask = state.find(task => task.id === action.payload.parentTaskID);
@@ -36,9 +51,15 @@ const taskSlice = createSlice({
           todo.status = 'done';
         }
       });
+      const completedTodoList = currentTask.todoList.filter((todo) => {
+        return todo.status === 'done';
+      });
+      if (completedTodoList.length === currentTask.todoList.length) {
+        currentTask.status = 'done';
+      };
     },
   },
 });
 
-export const { addTask, deleteTask, completeTask, deleteTodo, completeTodo } = taskSlice.actions;
+export const { addTask, deleteTask, completeTask, addTodo, deleteTodo, completeTodo } = taskSlice.actions;
 export const { reducer: taskReducer } = taskSlice;

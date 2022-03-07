@@ -36,7 +36,6 @@ const Todo: React.FC<TodoType> = ({ parentTaskID, description, status, id }) => 
     <Box
       sx={{
         mb: 3,
-        cursor: 'pointer'
       }}
     >
       <Paper

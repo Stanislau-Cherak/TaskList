@@ -50,12 +50,13 @@ const Task: React.FC<TaskProps> = ({ name, status, id, selected }) => {
   }
 
   const color = selected ? primaryColor : (status === 'done' ? doneColor : activeColor);
+  const cursor = selected ? 'default' : 'pointer';
 
   return (
     <Box
       sx={{
         mb: 3,
-        cursor: 'pointer'
+        cursor: cursor,
       }}
     >
       <Paper
