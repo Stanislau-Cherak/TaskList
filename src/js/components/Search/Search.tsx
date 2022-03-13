@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 import { Grid, Button, TextField, InputAdornment, Box, IconButton } from "@mui/material";
 import AutorenewIcon from '@mui/icons-material/Autorenew';
@@ -12,8 +11,6 @@ interface SearchProps {
 }
 
 const Search: React.FC<SearchProps> = ({ searchMask, onSearchChange, onModalOpen }) => {
-
-    const navigate = useNavigate();
 
     const [mask, setMask] = useState<string>(searchMask);
 
@@ -29,7 +26,6 @@ const Search: React.FC<SearchProps> = ({ searchMask, onSearchChange, onModalOpen
     const handleRenew = () => {
         onSearchChange('');
         setMask('');
-        navigate('/');
     }
 
     return (

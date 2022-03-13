@@ -11,6 +11,7 @@ import { TaskType, TodoType, TodoListType } from '../../types/types';
 
 import { createTask } from '../../helpers/createTask';
 import { createTodo } from '../../helpers/createTodo';
+import { createMessage } from '../../helpers/createMessage';
 
 const steps = ['Enter task name', 'Create work list', 'Create and ad'];
 
@@ -55,7 +56,7 @@ const CustomStepper: React.FC = () => {
       task.name.trim();
       task.todoList=[...todoList];
       dispatch(addTask(task));
-      dispatch(setMessage({ severity: 'success', message: 'New task succesfully added!', show: true }))
+      dispatch(setMessage(createMessage('success', 'New task succesfully added!')));
       setTodoList([]);
     }
   };

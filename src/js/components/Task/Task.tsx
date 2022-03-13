@@ -13,6 +13,7 @@ import { deleteTask, completeTask } from "../../features/slices/TaskSlice";
 import { setMessage } from '../../features/slices/MessageSlice';
 
 import { convertToLink } from "../../helpers/convertToLink";
+import { createMessage } from "../../helpers/createMessage";
 
 import { StatusType } from "../../types/types";
 
@@ -34,12 +35,12 @@ const Task: React.FC<TaskProps> = ({ name, status, id, selected }) => {
 
   const handleCompleteTask = (): void => {
     dispatch(completeTask({ id }));
-    dispatch(setMessage({ severity: 'warning', message: 'You marked the task as completed!', show: true }));
+    dispatch(setMessage(createMessage('warning', 'You marked the task as completed!')));
   }
 
   const handleDeleteTask = (): void => {
     dispatch(deleteTask({ id }));
-    dispatch(setMessage({ severity: 'error', message: 'You have deleted the task!', show: true }));
+    dispatch(setMessage(createMessage('error', 'You have deleted the task!')));
     if (selected) {
       navigate('/');
     }

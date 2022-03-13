@@ -13,6 +13,8 @@ import { green, orange } from '@mui/material/colors';
 
 import { TodoType } from "../../types/types";
 
+import { createMessage } from "../../helpers/createMessage";
+
 const doneColor = green[500];
 const activeColor = orange[500];
 
@@ -24,12 +26,12 @@ const Todo: React.FC<TodoType> = ({ parentTaskID, description, status, id }) => 
 
   const handleDeleteTodo = (): void => {
     dispatch(deleteTodo({ parentTaskID: parentTaskID, id: id }))
-    dispatch(setMessage({ severity: 'error', message: 'You have deleted the job!', show: true }));
+    dispatch(setMessage(createMessage('error', 'You have deleted the job!')));
   }
 
   const handleCompleteTodo = (): void => {
     dispatch(completeTodo({ parentTaskID: parentTaskID, id: id }));
-    dispatch(setMessage({ severity: 'warning', message: 'You marked the job as completed!', show: true }));
+    dispatch(setMessage(createMessage('warning', 'You marked the job as completed!')));
   }
 
   return (

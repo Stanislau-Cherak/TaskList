@@ -1,6 +1,9 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, Button } from '@mui/material';
+
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 import { TaskType, PreFilterType } from "../../types/types";
 
@@ -15,6 +18,8 @@ interface TasksListProps {
 
 const TaskList: React.FC<TasksListProps> = ({ filteredTasks, selectedTask, selected, prefilter }) => {
 
+  const navigate=useNavigate();
+
   return (
     <Box
       sx={{
@@ -24,7 +29,25 @@ const TaskList: React.FC<TasksListProps> = ({ filteredTasks, selectedTask, selec
     >
       {selected
         ?
-        <Task selected={true} {...selectedTask} />
+        <>
+          <Button
+            variant='contained'
+            sx={{
+              mb: 2.5,
+              maxWidth: 130,
+
+            }}
+            onClick={() => navigate('/')}
+          >
+            <ArrowBackIcon
+              sx={{
+                mr: 2,
+              }}
+            />
+            Go back
+          </Button>
+          <Task selected={true} {...selectedTask} />
+        </>
         : <>
           {filteredTasks.length != 0
             ?
