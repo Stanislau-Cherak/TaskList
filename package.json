@@ -4,8 +4,10 @@
   "description": "",
   "private": true,
   "scripts": {
-    "start": "webpack serve --open --config webpack.dev.config.js",
-    "build": "webpack --config webpack.prod.config.js"
+    "dev": "webpack serve --open --config webpack.dev.config.js",
+    "build": "webpack --config webpack.prod.config.js",
+    "server": "json-server -w server/db.json -p 4221",
+    "start": "concurrently \"npm run server\" \"npm run dev\""
   },
   "browserslist": "> 0.25%, not dead",
   "author": "Stanislav <sirstanislav27@gmail.com>",
@@ -17,10 +19,12 @@
     "@babel/preset-typescript": "^7.16.5",
     "babel-loader": "^8.2.3",
     "clean-webpack-plugin": "^4.0.0",
+    "concurrently": "^7.0.0",
     "css-loader": "^6.5.1",
     "css-minimizer-webpack-plugin": "^3.1.4",
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.5.0",
+    "json-server": "^0.17.0",
     "mini-css-extract-plugin": "^2.4.5",
     "node-sass": "^6.0.1",
     "sass-loader": "^12.3.0",
