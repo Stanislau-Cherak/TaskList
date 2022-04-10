@@ -19,7 +19,7 @@ const WorkArea: React.FC<WorkAreaProps> = ({ preFilter, searchMask }) => {
 
   const location = useLocation();
   const id = location.state;
-  const tasks: TaskType[] = useAppSelector(state => state.tasks);
+  const tasks: TaskType[] = useAppSelector(state => state.tasks).tasks;
 
   const selected = id ? true : false;
 

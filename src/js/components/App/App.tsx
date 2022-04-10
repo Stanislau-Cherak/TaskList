@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import { useAppSelector, useAppDispatch } from '../../hooks/hooks';
 
 import { showMessage } from '../../features/slices/MessageSlice';
+import { getTasks } from '../../features/slices/TaskSlice';
 
 import { Container } from '@mui/material';
 
@@ -43,6 +44,10 @@ const App: React.FC = () => {
     const handleModalClose = () => {
         setIsModalOpen(false);
     }
+
+    useEffect(() => {
+        dispatch(getTasks());
+      }, []);
 
     return (
         <>

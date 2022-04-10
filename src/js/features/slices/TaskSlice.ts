@@ -1,17 +1,51 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+
+import axios from 'axios';
+
+import { axiosOptionsGetTasks, axiosOptionsAddTasks } from '../../helpers/axiosRequest';
+
+import { createTask } from '../../helpers/createTask';
+
+import { TaskType } from '../../types/types';
+
+export const getTasks = createAsyncThunk(
+  'task/getTasks',
+  async function () {
+    const response = await axios.request<TaskType[]>(axiosOptionsGetTasks);
+    return response;
+  }
+);
+
+export const addNewTask = createAsyncThunk(
+  'task/addNewTask',
+  async function (task: TaskType, {dispatch}) {
+    const response = await axios.request(axiosOptionsAddTasks(task));
+    const data=await response.data;
+    dispatch(addTask(data));
+  }
+)
+
+const setError = (state, action) => {
+  state.status = 'rejected';
+  state.error = action.payload;
+};
 
 const taskSlice = createSlice({
   name: 'TASK',
-  initialState: [],
+  initialState: {
+    tasks: [],
+    status: null,
+    error: null,
+  },
   reducers: {
     addTask(state, action) {
-      state.push({ ...action.payload });
+      state.tasks.push({ ...action.payload });
     },
     deleteTask(state, action) {
-      return state.filter((task) => task.id !== action.payload.id);
+      state.tasks = state.tasks.filter((task) => task.id !== action.payload.id);
     },
     completeTask(state, action) {
-      state.forEach((task) => {
+      state.tasks.forEach((task) => {
         if (task.id === action.payload.id) {
           task.status = 'done';
           task.todoList.forEach(todo => todo.status = 'done');
@@ -19,12 +53,12 @@ const taskSlice = createSlice({
       });
     },
     addTodo(state, action) {
-      const currentTask = state.find(task => task.id === action.payload.parentTaskID);
+      const currentTask = state.tasks.find(task => task.id === action.payload.parentTaskID);
       currentTask.todoList.push({ ...action.payload });
       currentTask.status = 'active';
     },
     deleteTodo(state, action) {
-      const currentTask = state.find(task => task.id === action.payload.parentTaskID);
+      const currentTask = state.tasks.find(task => task.id === action.payload.parentTaskID);
       const currentTodos = currentTask.todoList.filter((todo) => {
         return todo.id !== action.payload.id;
       })
@@ -45,7 +79,7 @@ const taskSlice = createSlice({
       };
     },
     completeTodo(state, action) {
-      const currentTask = state.find(task => task.id === action.payload.parentTaskID);
+      const currentTask = state.tasks.find(task => task.id === action.payload.parentTaskID);
       currentTask.todoList.forEach((todo) => {
         if (todo.id === action.payload.id) {
           todo.status = 'done';
@@ -59,6 +93,17 @@ const taskSlice = createSlice({
       };
     },
   },
+  extraReducers: (builder) => {
+    builder.addCase(getTasks.pending, (state) => {
+      state.status = 'loading';
+      state.error = null;
+    })
+    builder.addCase(getTasks.fulfilled, (state, action) => {
+      state.status = 'resolved';
+      state.tasks = action.payload.data;
+    })
+    builder.addCase(getTasks.rejected, setError)
+  }
 });
 
 export const { addTask, deleteTask, completeTask, addTodo, deleteTodo, completeTodo } = taskSlice.actions;

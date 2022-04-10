@@ -13,7 +13,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ onClick }) => {
 
-    const activeTasksList: TaskType[] = useAppSelector(state => state.tasks).filter(task => {
+    const activeTasksList: TaskType[] = useAppSelector(state => state.tasks).tasks.filter(task => {
         return task.status === 'active';
     });
 
