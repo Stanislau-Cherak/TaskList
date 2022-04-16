@@ -1,27 +1,63 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
+import { setMessage } from './MessageSlice';
+
 import axios from 'axios';
 
-import { axiosOptionsGetTasks, axiosOptionsAddTasks } from '../../helpers/axiosRequest';
-
-import { createTask } from '../../helpers/createTask';
+import {
+  axiosOptionsGetTasks,
+  axiosOptionsAddTask,
+  axiosOptionsDeleteTask,
+  axiosOptionsCompleteTask,
+} from '../../helpers/axiosRequest';
 
 import { TaskType } from '../../types/types';
+
+import { createMessage } from '../../helpers/createMessage';
 
 export const getTasks = createAsyncThunk(
   'task/getTasks',
   async function () {
     const response = await axios.request<TaskType[]>(axiosOptionsGetTasks);
-    return response;
+    return response.data;
   }
 );
 
-export const addNewTask = createAsyncThunk(
-  'task/addNewTask',
-  async function (task: TaskType, {dispatch}) {
-    const response = await axios.request(axiosOptionsAddTasks(task));
-    const data=await response.data;
-    dispatch(addTask(data));
+export const asyncAddTask = createAsyncThunk(
+  'task/asyncAddTask',
+  async function (task: TaskType, { dispatch }) {
+    const response = await axios.request(axiosOptionsAddTask(task));
+    const data = await response.data;
+    const status = await response.status;
+    if (status === 201) {
+      dispatch(addTask(data));
+      dispatch(setMessage(createMessage('success', 'New task succesfully added!')));
+
+    }
+  }
+);
+
+export const asyncDeleteTask = createAsyncThunk(
+  'task/asyncDeleteTask',
+  async function (id: string, { dispatch }) {
+    const response = await axios.request(axiosOptionsDeleteTask(id));
+    const status = await response.status;
+    if (status === 200) {
+      dispatch(deleteTask({ id }));
+      dispatch(setMessage(createMessage('error', 'You have deleted the task!')));
+    }
+  }
+);
+
+export const asyncCompleteTask = createAsyncThunk(
+  'task/asyncCompleteTeask',
+  async function (id: string, { dispatch }) {
+    const response=await axios.request(axiosOptionsCompleteTask(id));
+    const status= await response.status;
+    if (status === 200) {
+      dispatch(completeTask({ id }));
+      dispatch(setMessage(createMessage('warning', 'You marked the task as completed!')));
+    }
   }
 )
 
@@ -100,7 +136,7 @@ const taskSlice = createSlice({
     })
     builder.addCase(getTasks.fulfilled, (state, action) => {
       state.status = 'resolved';
-      state.tasks = action.payload.data;
+      state.tasks = action.payload;
     })
     builder.addCase(getTasks.rejected, setError)
   }

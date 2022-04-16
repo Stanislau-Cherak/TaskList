@@ -7,7 +7,7 @@ export const axiosOptionsGetTasks: AxiosRequestConfig = {
   url: 'http://localhost:4221/tasks',
 };
 
-export function axiosOptionsAddTasks(data: TaskType): AxiosRequestConfig {
+export function axiosOptionsAddTask(data: TaskType): AxiosRequestConfig {
   return {
     method: 'POST',
     url: 'http://localhost:4221/tasks',
@@ -15,5 +15,21 @@ export function axiosOptionsAddTasks(data: TaskType): AxiosRequestConfig {
   }
 };
 
+export function axiosOptionsDeleteTask(id: string): AxiosRequestConfig {
+  return {
+    method: 'DELETE',
+    url: `http://localhost:4221/tasks/${id}`,
+  }
+};
+
+export function axiosOptionsCompleteTask(id: string): AxiosRequestConfig {
+  return {
+    method: 'PATCH',
+    url: `http://localhost:4221/tasks/${id}`,
+    data: {
+      status: 'done'
+    },
+  }
+};
 
 

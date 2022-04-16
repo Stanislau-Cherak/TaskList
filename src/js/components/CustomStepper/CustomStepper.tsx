@@ -4,14 +4,12 @@ import { useAppDispatch } from '../../hooks/hooks';
 
 import { Box, Stepper, Step, StepLabel, Button, Typography, TextField } from '@mui/material';
 
-import { addNewTask } from '../../features/slices/TaskSlice';
-import { setMessage } from '../../features/slices/MessageSlice';
+import { asyncAddTask } from '../../features/slices/TaskSlice';
 
 import { TaskType, TodoType, TodoListType } from '../../types/types';
 
 import { createTask } from '../../helpers/createTask';
 import { createTodo } from '../../helpers/createTodo';
-import { createMessage } from '../../helpers/createMessage';
 
 const steps = ['Enter task name', 'Create work list', 'Create and ad'];
 
@@ -55,8 +53,7 @@ const CustomStepper: React.FC = () => {
     if (activeStep === 2) {
       task.name.trim();
       task.todoList = [...todoList];
-      dispatch(addNewTask(task));
-      dispatch(setMessage(createMessage('success', 'New task succesfully added!')));
+      dispatch(asyncAddTask(task));
       setTodoList([]);
     }
   };

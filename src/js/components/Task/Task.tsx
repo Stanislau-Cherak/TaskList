@@ -9,11 +9,9 @@ import CheckIcon from '@mui/icons-material/Check';
 
 import { blue, green, orange } from '@mui/material/colors';
 
-import { deleteTask, completeTask } from "../../features/slices/TaskSlice";
-import { setMessage } from '../../features/slices/MessageSlice';
+import { asyncDeleteTask, asyncCompleteTask } from "../../features/slices/TaskSlice";
 
 import { convertToLink } from "../../helpers/convertToLink";
-import { createMessage } from "../../helpers/createMessage";
 
 import { StatusType } from "../../types/types";
 
@@ -34,13 +32,11 @@ const Task: React.FC<TaskProps> = ({ name, status, id, selected }) => {
   const navigate = useNavigate();
 
   const handleCompleteTask = (): void => {
-    dispatch(completeTask({ id }));
-    dispatch(setMessage(createMessage('warning', 'You marked the task as completed!')));
+    dispatch(asyncCompleteTask(id));
   }
 
   const handleDeleteTask = (): void => {
-    dispatch(deleteTask({ id }));
-    dispatch(setMessage(createMessage('error', 'You have deleted the task!')));
+    dispatch(asyncDeleteTask(id));
     if (selected) {
       navigate('/');
     }
