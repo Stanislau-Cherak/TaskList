@@ -20,9 +20,9 @@ const activeColor = orange[500];
 const primaryColor = blue[700];
 
 interface TaskProps {
-  name: string,
-  status: StatusType,
-  id: string,
+  name: string;
+  status: StatusType;
+  id: string;
   selected?: boolean,
 }
 

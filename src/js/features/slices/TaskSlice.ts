@@ -5,20 +5,21 @@ import { setMessage } from './MessageSlice';
 import axios from 'axios';
 
 import {
-  axiosOptionsGetTasks,
-  axiosOptionsAddTask,
-  axiosOptionsDeleteTask,
-  axiosOptionsCompleteTask,
+  axiosGETTasks,
+  axiosPOSTTask,
+  axiosDELETETask,
+  axiosPATCHTask,
+  axiosPOSTTodo,
 } from '../../helpers/axiosRequest';
 
-import { TaskType } from '../../types/types';
+import { TaskType, TodoListType, TodoType } from '../../types/types';
 
 import { createMessage } from '../../helpers/createMessage';
 
 export const getTasks = createAsyncThunk(
   'task/getTasks',
   async function () {
-    const response = await axios.request<TaskType[]>(axiosOptionsGetTasks);
+    const response = await axios.request<TaskType[]>(axiosGETTasks);
     return response.data;
   }
 );
@@ -26,7 +27,7 @@ export const getTasks = createAsyncThunk(
 export const asyncAddTask = createAsyncThunk(
   'task/asyncAddTask',
   async function (task: TaskType, { dispatch }) {
-    const response = await axios.request(axiosOptionsAddTask(task));
+    const response = await axios.request(axiosPOSTTask(task));
     const data = await response.data;
     const status = await response.status;
     if (status === 201) {
@@ -40,7 +41,7 @@ export const asyncAddTask = createAsyncThunk(
 export const asyncDeleteTask = createAsyncThunk(
   'task/asyncDeleteTask',
   async function (id: string, { dispatch }) {
-    const response = await axios.request(axiosOptionsDeleteTask(id));
+    const response = await axios.request(axiosDELETETask(id));
     const status = await response.status;
     if (status === 200) {
       dispatch(deleteTask({ id }));
@@ -52,11 +53,24 @@ export const asyncDeleteTask = createAsyncThunk(
 export const asyncCompleteTask = createAsyncThunk(
   'task/asyncCompleteTeask',
   async function (id: string, { dispatch }) {
-    const response=await axios.request(axiosOptionsCompleteTask(id));
-    const status= await response.status;
+    const response = await axios.request(axiosPATCHTask(id));
+    const status = await response.status;
     if (status === 200) {
       dispatch(completeTask({ id }));
       dispatch(setMessage(createMessage('warning', 'You marked the task as completed!')));
+    }
+  }
+)
+
+export const asyncAddTodo=createAsyncThunk(
+  'task/asyncAddTodo',
+  async function (todo: TodoType, {dispatch}) {
+    const response=await axios.request(axiosPOSTTodo(todo));
+    const data= await response.data;
+    const status =await response.status;
+    if (status===200) {
+      dispatch(addTodo(data));
+      dispatch(setMessage({ severity: 'success', message: 'New job succesfully added!', show: true }));
     }
   }
 )

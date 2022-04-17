@@ -1,13 +1,13 @@
 import { AxiosRequestConfig } from "axios";
 
-import { TaskType } from "../types/types";
+import { TaskType, TodoType } from "../types/types";
 
-export const axiosOptionsGetTasks: AxiosRequestConfig = {
+export const axiosGETTasks: AxiosRequestConfig = {
   method: 'GET',
   url: 'http://localhost:4221/tasks',
 };
 
-export function axiosOptionsAddTask(data: TaskType): AxiosRequestConfig {
+export function axiosPOSTTask(data: TaskType): AxiosRequestConfig {
   return {
     method: 'POST',
     url: 'http://localhost:4221/tasks',
@@ -15,20 +15,30 @@ export function axiosOptionsAddTask(data: TaskType): AxiosRequestConfig {
   }
 };
 
-export function axiosOptionsDeleteTask(id: string): AxiosRequestConfig {
+export function axiosDELETETask(id: string): AxiosRequestConfig {
   return {
     method: 'DELETE',
     url: `http://localhost:4221/tasks/${id}`,
   }
 };
 
-export function axiosOptionsCompleteTask(id: string): AxiosRequestConfig {
+export function axiosPATCHTask(id: string): AxiosRequestConfig {
   return {
     method: 'PATCH',
     url: `http://localhost:4221/tasks/${id}`,
     data: {
-      status: 'done'
+      status: 'done',
     },
+  }
+};
+
+export function axiosPOSTTodo(data: TodoType): AxiosRequestConfig {
+  const { parentTaskID } = data;
+  return {
+    method: 'POST',
+    url: `http://localhost:4221/tasks/${parentTaskID}`,
+    data: data,
+      
   }
 };
 

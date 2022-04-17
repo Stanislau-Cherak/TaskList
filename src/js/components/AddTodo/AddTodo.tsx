@@ -4,8 +4,7 @@ import { useAppDispatch } from "../../hooks/hooks";
 
 import { Box, Button, TextField } from '@mui/material';
 
-import { addTodo } from '../../features/slices/TaskSlice';
-import { setMessage } from '../../features/slices/MessageSlice';
+import { asyncAddTodo } from '../../features/slices/TaskSlice';
 
 import { createTodo } from '../../helpers/createTodo';
 
@@ -25,8 +24,7 @@ const AddTodo: React.FC<AddTodoProps> = ({ taskID }) => {
 
   const handleAddTodo = (): void => {
     const todo = createTodo(taskID, newJob.trim(), 'active');
-    dispatch(addTodo(todo));
-    dispatch(setMessage({ severity: 'success', message: 'New job succesfully added!', show: true }));
+    dispatch(asyncAddTodo(todo));
     setNewJob('');
   }
 
