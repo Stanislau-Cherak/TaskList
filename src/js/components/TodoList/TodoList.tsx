@@ -1,23 +1,27 @@
 import React from "react";
 
+import { useAppSelector } from "../../hooks/hooks";
+
 import { Box, Typography } from '@mui/material';
+
+import { getStateTodos } from "../../helpers/getState";
 
 import Todo from "../Todo/Todo";
 import Progress from "../Progress/Progress";
 import AddTodo from "../AddTodo/AddTodo";
 
-import { TaskType, TodoListType, TodoType, PreFilterType } from "../../types/types";
+import { TodoListType, TodoType, PreFilterType } from "../../types/types";
 
 interface TodoListProps {
-  selectedTask: TaskType,
+  taskID: string,
   selected: boolean,
   preFilter: PreFilterType,
   searchMask: string,
 }
 
-const TodoList: React.FC<TodoListProps> = ({ selectedTask, selected, preFilter, searchMask }) => {
+const TodoList: React.FC<TodoListProps> = ({ taskID, selected, preFilter, searchMask }) => {
 
-  const todos: TodoListType = selectedTask?.todoList;
+  const todos: TodoListType = useAppSelector(getStateTodos).todos.filter(todo=>todo.parentTaskID===taskID);
 
   const prefilteredTodos: TodoListType = (preFilter === 'all'
     ? todos
@@ -27,7 +31,7 @@ const TodoList: React.FC<TodoListProps> = ({ selectedTask, selected, preFilter, 
   const postfilteredTodo: TodoListType = prefilteredTodos?.filter((todo) => {
     return todo.description.toLowerCase().includes(searchMask.toLowerCase())
   }
-  );  
+  );
 
   const activeTodos: TodoListType = postfilteredTodo?.filter((todo) => {
     return todo.status === 'active';
@@ -37,7 +41,7 @@ const TodoList: React.FC<TodoListProps> = ({ selectedTask, selected, preFilter, 
     return todo.status === 'done';
   });
 
-  const totalCompletedTodos: TodoListType=selectedTask?.todoList.filter((todo)=>{
+  const totalCompletedTodos: TodoListType = todos?.filter((todo) => {
     return todo.status === 'done';
   })
 
@@ -68,7 +72,7 @@ const TodoList: React.FC<TodoListProps> = ({ selectedTask, selected, preFilter, 
                   Complete:
                 </Typography>
                 <Progress value={progress} />
-                <AddTodo taskID={selectedTask?.id} />
+                <AddTodo taskID={taskID} />
                 {[...activeTodos, ...completedTodos].map((todo: TodoType) => {
                   return (
                     <Todo key={todo.id} {...todo} />
@@ -87,7 +91,7 @@ const TodoList: React.FC<TodoListProps> = ({ selectedTask, selected, preFilter, 
                 >
                   Job list is empty. Please, add some job.
                 </Typography>
-                <AddTodo taskID={selectedTask?.id} />
+                <AddTodo taskID={taskID} />
               </>
           }
         </>

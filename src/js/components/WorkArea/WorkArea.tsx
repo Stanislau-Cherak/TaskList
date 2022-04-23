@@ -5,6 +5,8 @@ import { useAppSelector } from "../../hooks/hooks";
 
 import { Grid, Box, Typography } from "@mui/material";
 
+import { getStateTasks } from "../../helpers/getState";
+
 import { PreFilterType, TaskType } from '../../types/types';
 
 import TaskList from '../TaskList/TaskList';
@@ -19,7 +21,7 @@ const WorkArea: React.FC<WorkAreaProps> = ({ preFilter, searchMask }) => {
 
   const location = useLocation();
   const id = location.state;
-  const tasks: TaskType[] = useAppSelector(state => state.tasks).tasks;
+  const { tasks } = useAppSelector(getStateTasks);
 
   const selected = id ? true : false;
 
@@ -58,7 +60,7 @@ const WorkArea: React.FC<WorkAreaProps> = ({ preFilter, searchMask }) => {
 
           <Grid item xs={12} sm={7} md={8}>
             <TodoList
-              selectedTask={selectedTask}
+              taskID={id}
               selected={selected}
               preFilter={preFilter}
               searchMask={searchMask}

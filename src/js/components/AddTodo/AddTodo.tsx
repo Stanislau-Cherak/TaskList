@@ -4,8 +4,7 @@ import { useAppDispatch } from "../../hooks/hooks";
 
 import { Box, Button, TextField } from '@mui/material';
 
-import { asyncAddTodo } from '../../features/slices/TaskSlice';
-
+import { asyncAddTodo } from "../../features/slices/TodoSlice";
 import { createTodo } from '../../helpers/createTodo';
 
 interface AddTodoProps {

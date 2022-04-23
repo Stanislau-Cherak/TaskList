@@ -7,6 +7,11 @@ export const axiosGETTasks: AxiosRequestConfig = {
   url: 'http://localhost:4221/tasks',
 };
 
+export const axiosGETTodos: AxiosRequestConfig = {
+  method: 'GET',
+  url: 'http://localhost:4221/todos',
+};
+
 export function axiosPOSTTask(data: TaskType): AxiosRequestConfig {
   return {
     method: 'POST',
@@ -33,13 +38,27 @@ export function axiosPATCHTask(id: string): AxiosRequestConfig {
 };
 
 export function axiosPOSTTodo(data: TodoType): AxiosRequestConfig {
-  const { parentTaskID } = data;
   return {
     method: 'POST',
-    url: `http://localhost:4221/tasks/${parentTaskID}`,
-    data: data,
-      
+    url: `http://localhost:4221/todos`,
+    data: data,      
   }
 };
 
+export function axiosDELETETodo(id: string): AxiosRequestConfig {
+  return {
+    method: 'DELETE',
+    url: `http://localhost:4221/todos/${id}`,
+  }
+};
+
+export function axiosPATCHTodo(id: string): AxiosRequestConfig {
+  return {
+    method: 'PATCH',
+    url: `http://localhost:4221/todos/${id}`,
+    data: {
+      status: 'done',
+    },
+  }
+};
 

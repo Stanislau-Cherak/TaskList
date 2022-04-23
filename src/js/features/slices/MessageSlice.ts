@@ -1,13 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { AlertColor } from "@mui/material/Alert"
-
-type MessageType = {
-  show: boolean;
-  message: string;
-  duration: number;
-  severity: AlertColor;
-}
+import { MessageType } from "../../types/types";
 
 const initialState: MessageType = {
   show: false,

@@ -6,7 +6,7 @@ import { Box, Paper, IconButton, Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CheckIcon from '@mui/icons-material/Check';
 
-import { completeTodo, deleteTodo } from "../../features/slices/TaskSlice";
+import { asyncCompleteTodo, asyncDeleteTodo } from "../../features/slices/TodoSlice";
 import { setMessage } from "../../features/slices/MessageSlice";
 
 import { green, orange } from '@mui/material/colors';
@@ -18,20 +18,18 @@ import { createMessage } from "../../helpers/createMessage";
 const doneColor = green[500];
 const activeColor = orange[500];
 
-const Todo: React.FC<TodoType> = ({ parentTaskID, description, status, id }) => {
+const Todo: React.FC<TodoType> = ({ description, status, id }) => {
 
   const dispatch = useAppDispatch();
 
   const color = (status === 'done' ? doneColor : activeColor);
 
   const handleDeleteTodo = (): void => {
-    dispatch(deleteTodo({ parentTaskID: parentTaskID, id: id }))
-    dispatch(setMessage(createMessage('error', 'You have deleted the job!')));
+    dispatch(asyncDeleteTodo(id));
   }
 
   const handleCompleteTodo = (): void => {
-    dispatch(completeTodo({ parentTaskID: parentTaskID, id: id }));
-    dispatch(setMessage(createMessage('warning', 'You marked the job as completed!')));
+    dispatch(asyncCompleteTodo(id));
   }
 
   return (

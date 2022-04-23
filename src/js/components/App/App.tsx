@@ -5,8 +5,11 @@ import { useAppSelector, useAppDispatch } from '../../hooks/hooks';
 
 import { showMessage } from '../../features/slices/MessageSlice';
 import { getTasks } from '../../features/slices/TaskSlice';
+import { getTodos } from '../../features/slices/TodoSlice';
 
 import { Container } from '@mui/material';
+
+import { getStateMessage } from '../../helpers/getState';
 
 import { PreFilterType } from '../../types/types';
 
@@ -23,7 +26,7 @@ const App: React.FC = () => {
 
     const dispatch = useAppDispatch();
 
-    const message = useAppSelector(state => state.message);
+    const message = useAppSelector(getStateMessage);
 
     const [preFilter, setPreFilter] = useState<PreFilterType>('all');
     const [searchMask, setSearchMask] = useState<string>('');
@@ -47,6 +50,7 @@ const App: React.FC = () => {
 
     useEffect(() => {
         dispatch(getTasks());
+        dispatch(getTodos());
       }, []);
 
     return (
