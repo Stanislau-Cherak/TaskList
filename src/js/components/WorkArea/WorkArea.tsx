@@ -7,7 +7,7 @@ import { Grid, Box, Typography } from "@mui/material";
 
 import { getStateTasks } from "../../helpers/getState";
 
-import { PreFilterType, TaskType } from '../../types/types';
+import { PreFilterType } from '../../types/types';
 
 import TaskList from '../TaskList/TaskList';
 import TodoList from '../TodoList/TodoList';
@@ -26,6 +26,8 @@ const WorkArea: React.FC<WorkAreaProps> = ({ preFilter, searchMask }) => {
   const selected = id ? true : false;
 
   const selectedTask = tasks.find((task) => task.id === id);
+
+  const taskStatus = selectedTask?.status;
 
   const prefilteredTasks = (preFilter === 'all'
     ? tasks
@@ -61,6 +63,7 @@ const WorkArea: React.FC<WorkAreaProps> = ({ preFilter, searchMask }) => {
           <Grid item xs={12} sm={7} md={8}>
             <TodoList
               taskID={id}
+              status={taskStatus}
               selected={selected}
               preFilter={preFilter}
               searchMask={searchMask}

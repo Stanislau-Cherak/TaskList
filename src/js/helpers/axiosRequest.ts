@@ -62,3 +62,12 @@ export function axiosPATCHTodo(id: string): AxiosRequestConfig {
   }
 };
 
+export function axiosPATCHTaskUncomplete(id: string): AxiosRequestConfig {
+  return {
+    method: 'PATCH',
+    url: `http://localhost:4221/tasks/${id}`,
+    data: {
+      status: 'active',
+    },
+  }
+};

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { useAppSelector } from "../../hooks/hooks";
+import { useAppSelector, useAppDispatch } from "../../hooks/hooks";
 
 import { Box, Typography } from '@mui/material';
 
@@ -10,18 +10,21 @@ import Todo from "../Todo/Todo";
 import Progress from "../Progress/Progress";
 import AddTodo from "../AddTodo/AddTodo";
 
-import { TodoListType, TodoType, PreFilterType } from "../../types/types";
+import { TodoListType, TodoType, PreFilterType, StatusType } from "../../types/types";
+import { asyncCompleteTask, asyncUncompleteTask } from "../../features/slices/TaskSlice";
 
 interface TodoListProps {
   taskID: string,
+  status?: StatusType,
   selected: boolean,
   preFilter: PreFilterType,
   searchMask: string,
 }
 
-const TodoList: React.FC<TodoListProps> = ({ taskID, selected, preFilter, searchMask }) => {
+const TodoList: React.FC<TodoListProps> = ({ taskID, status, selected, preFilter, searchMask }) => {
 
-  const todos: TodoListType = useAppSelector(getStateTodos).todos.filter(todo=>todo.parentTaskID===taskID);
+  const dispatch = useAppDispatch();
+  const todos: TodoListType = useAppSelector(getStateTodos).todos.filter(todo => todo.parentTaskID === taskID);
 
   const prefilteredTodos: TodoListType = (preFilter === 'all'
     ? todos
@@ -46,6 +49,14 @@ const TodoList: React.FC<TodoListProps> = ({ taskID, selected, preFilter, search
   })
 
   const progress = (totalCompletedTodos?.length / todos?.length) * 100;
+
+  if (status==='active'&&progress===100) {
+    dispatch(asyncCompleteTask(taskID));
+  }
+
+  if (status==='done'&&progress!==100) {
+    dispatch(asyncUncompleteTask(taskID));
+  }
 
   return (
 

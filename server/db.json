@@ -1,36 +1,30 @@
 {
   "tasks": [
     {
-      "name": "task 2",
+      "name": "task1",
       "todoList": [],
-      "status": "active",
-      "id": "task-l2c5ncz9"
-    },
-    {
-      "name": "task 3",
-      "todoList": [],
-      "status": "active",
-      "id": "task-l2c7zq6x"
+      "status": "done",
+      "id": "task-l2d9tduc"
     }
   ],
   "todos": [
     {
-      "parentTaskID": "task-l2c5ncz9",
-      "description": "fgh",
+      "parentTaskID": "task-l2d9tduc",
+      "description": "234",
       "status": "done",
-      "id": "todo-l2c7547f"
+      "id": "todo-l2d9tfde"
     },
     {
-      "parentTaskID": "task-l2c5ncz9",
-      "description": "fgjhfg",
-      "status": "active",
-      "id": "todo-l2c7zjer"
+      "parentTaskID": "task-l2d9tduc",
+      "description": "efh",
+      "status": "done",
+      "id": "todo-l2d9tgx6"
     },
     {
-      "parentTaskID": "task-l2c7zq6x",
-      "description": "hjcj",
+      "parentTaskID": "task-l2d9tduc",
+      "description": "fhj",
       "status": "done",
-      "id": "todo-l2c8j15d"
+      "id": "todo-l2da1d6y"
     }
   ]
 }

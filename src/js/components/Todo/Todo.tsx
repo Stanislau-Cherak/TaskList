@@ -7,13 +7,10 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import CheckIcon from '@mui/icons-material/Check';
 
 import { asyncCompleteTodo, asyncDeleteTodo } from "../../features/slices/TodoSlice";
-import { setMessage } from "../../features/slices/MessageSlice";
 
 import { green, orange } from '@mui/material/colors';
 
 import { TodoType } from "../../types/types";
-
-import { createMessage } from "../../helpers/createMessage";
 
 const doneColor = green[500];
 const activeColor = orange[500];

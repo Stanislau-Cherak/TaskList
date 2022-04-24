@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-import { useAppDispatch } from "../../hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 
 import { Box, Paper, IconButton, Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -10,10 +10,13 @@ import CheckIcon from '@mui/icons-material/Check';
 import { blue, green, orange } from '@mui/material/colors';
 
 import { asyncDeleteTask, asyncCompleteTask } from "../../features/slices/TaskSlice";
+import { asyncDeleteTodo, asyncCompleteTodo } from "../../features/slices/TodoSlice";
 
 import { convertToLink } from "../../helpers/convertToLink";
 
-import { StatusType } from "../../types/types";
+import { getStateTodos } from "../../helpers/getState";
+
+import { StatusType, TodoListType } from "../../types/types";
 
 const doneColor = green[500];
 const activeColor = orange[500];
@@ -30,13 +33,20 @@ const Task: React.FC<TaskProps> = ({ name, status, id, selected }) => {
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const todos: TodoListType = useAppSelector(getStateTodos).todos.filter(todo =>  todo.parentTaskID === id);
 
   const handleCompleteTask = (): void => {
     dispatch(asyncCompleteTask(id));
+    todos.forEach((todo)=>{
+      dispatch(asyncCompleteTodo(todo.id))
+    })
   }
 
   const handleDeleteTask = (): void => {
     dispatch(asyncDeleteTask(id));
+    todos.forEach((todo)=>{
+      dispatch(asyncDeleteTodo(todo.id))
+    })
     if (selected) {
       navigate('/');
     }

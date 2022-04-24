@@ -9,6 +9,7 @@ import {
   axiosPOSTTask,
   axiosDELETETask,
   axiosPATCHTask,
+  axiosPATCHTaskUncomplete
 } from '../../helpers/axiosRequest';
 
 import { TaskType } from '../../types/types';
@@ -49,6 +50,18 @@ export const asyncDeleteTask = createAsyncThunk(
   }
 );
 
+export const asyncUncompleteTask = createAsyncThunk(
+  'task/asyncCompleteTask',
+  async function (id: string, { dispatch }) {
+    const response = await axios.request(axiosPATCHTaskUncomplete(id));
+    const status = await response.status;
+    if (status === 200) {
+      dispatch(uncompleteTask({ id }));
+      dispatch(setMessage(createMessage('warning', 'You marked the task as active!')));
+    }
+  }
+)
+
 export const asyncCompleteTask = createAsyncThunk(
   'task/asyncCompleteTask',
   async function (id: string, { dispatch }) {
@@ -81,7 +94,14 @@ const taskSlice = createSlice({
           task.status = 'done';
         }
       });
-    },    
+    },
+    uncompleteTask(state, action) {
+      state.tasks.forEach((task) => {
+        if (task.id === action.payload.id) {
+          task.status = 'active';
+        }
+      });
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getTasks.pending, (state) => {
@@ -96,5 +116,5 @@ const taskSlice = createSlice({
   }
 });
 
-export const { addTask, deleteTask, completeTask } = taskSlice.actions;
+export const { addTask, deleteTask, completeTask, uncompleteTask } = taskSlice.actions;
 export const { reducer: taskReducer } = taskSlice;
