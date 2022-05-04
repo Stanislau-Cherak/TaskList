@@ -5,6 +5,8 @@ import { useAppSelector } from "../../hooks/hooks";
 import { AppBar, Badge, IconButton, Toolbar, Typography } from "@mui/material";
 import WorkIcon from '@mui/icons-material/Work';
 
+import { getStateTasks } from "../../helpers/getState";
+
 import { TaskType, PreFilterType } from "../../types/types";
 
 interface HeaderProps {
@@ -13,7 +15,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ onClick }) => {
 
-    const activeTasksList: TaskType[] = useAppSelector(state => state.tasks).tasks.filter(task => {
+    const activeTasksList: TaskType[] = useAppSelector(getStateTasks).tasks.filter(task => {
         return task.status === 'active';
     });
 

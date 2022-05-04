@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { MessageType } from "../../types/types";
 
@@ -13,13 +13,13 @@ const messageSlice = createSlice({
   name: 'MESSAGE',
   initialState: initialState,
   reducers: {
-    setMessage(state, action) {
+    setMessage(state, action: PayloadAction<MessageType>) {
       state.severity = action.payload.severity;
       state.message = action.payload.message;
       state.show = action.payload.show;
     },
-    showMessage(state, action) {
-      state.show = action.payload.show;
+    showMessage(state, action: PayloadAction<boolean>) {
+      state.show = action.payload;
     }
   }
 });

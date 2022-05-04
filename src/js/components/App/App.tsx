@@ -51,7 +51,7 @@ const App: React.FC = () => {
     useEffect(() => {
         dispatch(getTasks());
         dispatch(getTodos());
-      }, []);
+    }, []);
 
     return (
         <>
@@ -75,7 +75,7 @@ const App: React.FC = () => {
                 message={message.message}
                 duration={message.duration}
                 severity={message.severity}
-                onClose={() => dispatch(showMessage({ show: false }))}
+                onClose={() => dispatch(showMessage(false))}
             />
         </>
     )

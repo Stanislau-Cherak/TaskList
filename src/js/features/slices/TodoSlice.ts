@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 
 import { setMessage } from './MessageSlice';
 
@@ -43,7 +43,7 @@ export const asyncDeleteTodo = createAsyncThunk(
     const response = await axios.request(axiosDELETETodo(id));
     const status = await response.status;
     if (status === 200) {
-      dispatch(deleteTodo({ id }));
+      dispatch(deleteTodo(id));
       dispatch(setMessage(createMessage('error', 'You have deleted the job!')));
     }
   }
@@ -55,7 +55,7 @@ export const asyncCompleteTodo = createAsyncThunk(
     const response = await axios.request(axiosPATCHTodo(id));
     const status = await response.status;
     if (status === 200) {
-      dispatch(completeTodo({ id }));
+      dispatch(completeTodo(id));
       dispatch(setMessage(createMessage('warning', 'You marked the job as completed!')));
     }
   }
@@ -69,15 +69,15 @@ const todoSlice = createSlice({
     error: null,
   },
   reducers: {
-    addTodo(state, action) {
+    addTodo(state, action: PayloadAction<TodoType>) {
       state.todos.push({ ...action.payload });
     },
-    deleteTodo(state, action) {
-      state.todos = state.todos.filter((todo) => todo.id !== action.payload.id);
+    deleteTodo(state, action:PayloadAction<string>) {
+      state.todos = state.todos.filter((todo) => todo.id !== action.payload);
     },
-    completeTodo(state, action) {
+    completeTodo(state, action:PayloadAction<string>) {
       state.todos.forEach((todo) => {
-        if (todo.id === action.payload.id) {
+        if (todo.id === action.payload) {
           todo.status = 'done';
         }
       });

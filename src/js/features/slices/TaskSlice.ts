@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 
 import { setMessage } from './MessageSlice';
 
@@ -44,7 +44,7 @@ export const asyncDeleteTask = createAsyncThunk(
     const response = await axios.request(axiosDELETETask(id));
     const status = await response.status;
     if (status === 200) {
-      dispatch(deleteTask({ id }));
+      dispatch(deleteTask(id));
       dispatch(setMessage(createMessage('error', 'You have deleted the task!')));
     }
   }
@@ -56,7 +56,7 @@ export const asyncUncompleteTask = createAsyncThunk(
     const response = await axios.request(axiosPATCHTaskUncomplete(id));
     const status = await response.status;
     if (status === 200) {
-      dispatch(uncompleteTask({ id }));
+      dispatch(uncompleteTask(id));
       dispatch(setMessage(createMessage('warning', 'You marked the task as active!')));
     }
   }
@@ -68,7 +68,7 @@ export const asyncCompleteTask = createAsyncThunk(
     const response = await axios.request(axiosPATCHTask(id));
     const status = await response.status;
     if (status === 200) {
-      dispatch(completeTask({ id }));
+      dispatch(completeTask(id));
       dispatch(setMessage(createMessage('warning', 'You marked the task as completed!')));
     }
   }
@@ -82,22 +82,22 @@ const taskSlice = createSlice({
     error: null,
   },
   reducers: {
-    addTask(state, action) {
+    addTask(state, action: PayloadAction<TaskType>) {
       state.tasks.push({ ...action.payload });
     },
-    deleteTask(state, action) {
-      state.tasks = state.tasks.filter((task) => task.id !== action.payload.id);
+    deleteTask(state, action:PayloadAction<string>) {
+      state.tasks = state.tasks.filter((task) => task.id !== action.payload);
     },
-    completeTask(state, action) {
+    completeTask(state, action:PayloadAction<string>) {
       state.tasks.forEach((task) => {
-        if (task.id === action.payload.id) {
+        if (task.id === action.payload) {
           task.status = 'done';
         }
       });
     },
-    uncompleteTask(state, action) {
+    uncompleteTask(state, action:PayloadAction<string>) {
       state.tasks.forEach((task) => {
-        if (task.id === action.payload.id) {
+        if (task.id === action.payload) {
           task.status = 'active';
         }
       });
