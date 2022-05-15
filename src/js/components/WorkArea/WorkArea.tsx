@@ -20,7 +20,9 @@ interface WorkAreaProps {
 const WorkArea: React.FC<WorkAreaProps> = ({ preFilter, searchMask }) => {
 
   const location = useLocation();
-  const id = location.state;
+  
+  const id = location.state as string;  
+ 
   const { tasks } = useAppSelector(getStateTasks);
   const loading = (useAppSelector(getStateTasks).status === 'loading' ? true : false);
 

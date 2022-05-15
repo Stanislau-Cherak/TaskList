@@ -10,7 +10,7 @@ import { TaskType, TodoType, TodoListType } from '../../types/types';
 
 import { createTask } from '../../helpers/createTask';
 import { createTodo } from '../../helpers/createTodo';
-import { asyncAddTodo } from '../../features/slices/TodoSlice';
+import { asyncAddTodos } from '../../features/slices/TodoSlice';
 
 const steps = ['Enter task name', 'Create work list', 'Create and ad'];
 
@@ -54,9 +54,7 @@ const CustomStepper: React.FC = () => {
     if (activeStep === 2) {
       task.name.trim();
       dispatch(asyncAddTask(task));
-      todoList.forEach((todo) => {
-        dispatch(asyncAddTodo(todo))
-      });
+      dispatch(asyncAddTodos(todoList));
       setTodoList([]);
     }
   };

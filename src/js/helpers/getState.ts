@@ -1,16 +1,4 @@
-import { TaskType, TodoListType, MessageType } from '../types/types'
-
-type StateTasksType={
-  tasks: TaskType[];
-  status: null|'loading'|'resolved'|'rejected';
-  error: string;
-}
-
-type StateTodosType={
-  todos: TodoListType;
-  status: null|'loading'|'resolved'|'rejected';
-  error: string;
-}
+import { StateTasksType, StateTodosType, MessageType } from '../types/types'
 
 export const getStateTasks = (state):StateTasksType => {
   return state.tasks;

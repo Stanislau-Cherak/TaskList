@@ -25,3 +25,15 @@ export type MessageType = {
   duration: number;
   severity: AlertColor;
 }
+
+export type StateTasksType={
+  tasks: TaskType[];
+  status: null|'loading'|'resolved'|'rejected';
+  error: null|string;
+}
+
+export type StateTodosType={
+  todos: TodoListType;
+  status: null|'pending'|'loading'|'resolved'|'rejected';
+  error: string;
+}

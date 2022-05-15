@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import { useAppDispatch } from "../../hooks/hooks";
 
@@ -23,7 +23,7 @@ const AddTodo: React.FC<AddTodoProps> = ({ taskID }) => {
 
   const handleAddTodo = (): void => {
     const todo = createTodo(taskID, newJob.trim(), 'active');
-    dispatch(asyncAddTodo(todo));
+    dispatch(asyncAddTodo(todo))
     setNewJob('');
   }
 

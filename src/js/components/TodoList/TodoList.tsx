@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import { useAppSelector, useAppDispatch } from "../../hooks/hooks";
 
@@ -11,7 +11,7 @@ import Progress from "../Progress/Progress";
 import AddTodo from "../AddTodo/AddTodo";
 
 import { TodoListType, TodoType, PreFilterType, StatusType } from "../../types/types";
-import { asyncCompleteTask, asyncUncompleteTask } from "../../features/slices/TaskSlice";
+import { asyncToggleTask } from "../../features/slices/TaskSlice";
 
 interface TodoListProps {
   taskID: string,
@@ -50,13 +50,14 @@ const TodoList: React.FC<TodoListProps> = ({ taskID, status, selected, preFilter
 
   const progress = (totalCompletedTodos?.length / todos?.length) * 100;
 
-  if (status==='active'&&progress===100) {
-    dispatch(asyncCompleteTask(taskID));
-  }
-
-  if (status==='done'&&progress!==100) {
-    dispatch(asyncUncompleteTask(taskID));
-  }
+  useEffect(()=>{
+    if (status === 'active' && progress === 100) {
+      dispatch(asyncToggleTask(taskID));
+    }  
+    if (status === 'done' && progress !== 100) {
+      dispatch(asyncToggleTask(taskID));
+    }
+  }, [progress])
 
   return (
 
@@ -83,7 +84,7 @@ const TodoList: React.FC<TodoListProps> = ({ taskID, status, selected, preFilter
                   Complete:
                 </Typography>
                 <Progress value={progress} />
-                <AddTodo taskID={taskID} />
+                <AddTodo taskID={taskID}  />
                 {[...activeTodos, ...completedTodos].map((todo: TodoType) => {
                   return (
                     <Todo key={todo.id} {...todo} />
@@ -102,7 +103,7 @@ const TodoList: React.FC<TodoListProps> = ({ taskID, status, selected, preFilter
                 >
                   Job list is empty. Please, add some job.
                 </Typography>
-                <AddTodo taskID={taskID} />
+                <AddTodo taskID={taskID}  />
               </>
           }
         </>

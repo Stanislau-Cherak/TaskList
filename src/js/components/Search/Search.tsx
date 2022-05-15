@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useTransition } from "react";
 
 import { Grid, Button, TextField, InputAdornment, Box, IconButton } from "@mui/material";
 import AutorenewIcon from '@mui/icons-material/Autorenew';
@@ -12,6 +12,7 @@ interface SearchProps {
 
 const Search: React.FC<SearchProps> = ({ searchMask, onSearchChange, onModalOpen }) => {
 
+    const [isPending, startTransition] = useTransition();
     const [mask, setMask] = useState<string>(searchMask);
 
     const handleModalOpen = () => {
@@ -19,8 +20,10 @@ const Search: React.FC<SearchProps> = ({ searchMask, onSearchChange, onModalOpen
     };
 
     const handleSearchChange = (event) => {
-        setMask(event.target.value);
-        onSearchChange(event.target.value.trim());
+        startTransition(() => {
+            setMask(event.target.value);
+            onSearchChange(event.target.value.trim());
+        })
     }
 
     const handleRenew = () => {

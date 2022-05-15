@@ -1,4 +1,5 @@
-export const setError = (state, action) => {
-  state.status = 'rejected';
-  state.error = action.payload;
+import { AnyAction } from '@reduxjs/toolkit';
+
+export const setError = (action: AnyAction) => {
+  return action.type.endsWith('rejected');
 };

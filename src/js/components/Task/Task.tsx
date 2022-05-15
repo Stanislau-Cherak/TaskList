@@ -9,8 +9,8 @@ import CheckIcon from '@mui/icons-material/Check';
 
 import { blue, green, orange } from '@mui/material/colors';
 
-import { asyncDeleteTask, asyncCompleteTask } from "../../features/slices/TaskSlice";
-import { asyncDeleteTodo, asyncCompleteTodo } from "../../features/slices/TodoSlice";
+import { asyncDeleteTask, asyncToggleTask } from "../../features/slices/TaskSlice";
+import { asyncDeleteTodos, asyncCompleteTodos, asyncCompleteTodo, asyncDeleteTodo } from "../../features/slices/TodoSlice";
 
 import { convertToLink } from "../../helpers/convertToLink";
 
@@ -33,20 +33,16 @@ const Task: React.FC<TaskProps> = ({ name, status, id, selected }) => {
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const todos: TodoListType = useAppSelector(getStateTodos).todos.filter(todo =>  todo.parentTaskID === id);
+  const todos: TodoListType = useAppSelector(getStateTodos).todos.filter(todo => todo.parentTaskID === id);
 
   const handleCompleteTask = (): void => {
-    dispatch(asyncCompleteTask(id));
-    todos.forEach((todo)=>{
-      dispatch(asyncCompleteTodo(todo.id))
-    })
+    dispatch(asyncToggleTask(id));
+    dispatch(asyncCompleteTodos(todos));
   }
 
   const handleDeleteTask = (): void => {
     dispatch(asyncDeleteTask(id));
-    todos.forEach((todo)=>{
-      dispatch(asyncDeleteTodo(todo.id))
-    })
+    dispatch(asyncDeleteTodos(todos))
     if (selected) {
       navigate('/');
     }

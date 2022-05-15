@@ -1,6 +1,6 @@
 import { AxiosRequestConfig } from "axios";
 
-import { TaskType, TodoType } from "../types/types";
+import { TaskType, TodoType, StatusType } from "../types/types";
 
 export const axiosGETTasks: AxiosRequestConfig = {
   method: 'GET',
@@ -27,12 +27,12 @@ export function axiosDELETETask(id: string): AxiosRequestConfig {
   }
 };
 
-export function axiosPATCHTask(id: string): AxiosRequestConfig {
+export function axiosPATCHTask(id: string, status: StatusType): AxiosRequestConfig {
   return {
     method: 'PATCH',
     url: `http://localhost:4221/tasks/${id}`,
     data: {
-      status: 'done',
+      status: status,
     },
   }
 };
@@ -41,7 +41,7 @@ export function axiosPOSTTodo(data: TodoType): AxiosRequestConfig {
   return {
     method: 'POST',
     url: `http://localhost:4221/todos`,
-    data: data,      
+    data: data,
   }
 };
 
@@ -58,16 +58,6 @@ export function axiosPATCHTodo(id: string): AxiosRequestConfig {
     url: `http://localhost:4221/todos/${id}`,
     data: {
       status: 'done',
-    },
-  }
-};
-
-export function axiosPATCHTaskUncomplete(id: string): AxiosRequestConfig {
-  return {
-    method: 'PATCH',
-    url: `http://localhost:4221/tasks/${id}`,
-    data: {
-      status: 'active',
     },
   }
 };
