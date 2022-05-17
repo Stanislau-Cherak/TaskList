@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, PayloadAction, AnyAction } from '@reduxjs/toolkit';
 
 import { setMessage } from './MessageSlice';
 
@@ -66,7 +66,7 @@ export const asyncToggleTask = createAsyncThunk<string, string, { rejectValue: s
       if (status !== 200) {
         return rejectWithValue(`Can't mark task. Server error`);
       }
-      dispatch(setMessage(createMessage('warning', 'You marked the task as doned!')));
+      dispatch(setMessage(createMessage('warning', `You marked the task as ${newStatus}!`)));
       return id;
     }
   }
@@ -81,7 +81,12 @@ const initialState: StateTasksType = {
 const taskSlice = createSlice({
   name: 'TASK',
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    resetTaskError(state) {
+      state.status = 'resolved';
+      state.error = null;      
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getTasks.pending, (state) => {
@@ -114,11 +119,12 @@ const taskSlice = createSlice({
           task.status = newStatus;
         }
       })
-      .addMatcher(setError, (state, action: PayloadAction<string>) => {
-        state.error = action.payload;
+      .addMatcher(setError, (state, action: AnyAction) => {
+        state.error = action.error.message.concat('','.');
         state.status = 'rejected';
       })
   }
 });
 
+export const {resetTaskError}=taskSlice.actions;
 export const { reducer: taskReducer } = taskSlice;

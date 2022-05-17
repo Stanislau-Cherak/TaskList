@@ -37,3 +37,8 @@ export type StateTodosType={
   status: null|'pending'|'loading'|'resolved'|'rejected';
   error: string;
 }
+
+export type AlertType={
+  isAlert:boolean;
+  alertMessage: string;
+}

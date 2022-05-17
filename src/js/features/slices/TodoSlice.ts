@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, PayloadAction, AnyAction } from '@reduxjs/toolkit';
 
 import { setMessage } from './MessageSlice';
 
@@ -129,7 +129,12 @@ const initialState: StateTodosType = {
 const todoSlice = createSlice({
   name: 'todo',
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    resetTodoError(state) {
+      state.status = 'resolved';
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getTodos.pending, (state) => {
@@ -141,26 +146,29 @@ const todoSlice = createSlice({
         state.todos = action.payload;
       })
       .addCase(asyncAddTodos.pending, (state) => {
-        state.status = 'pending';        
+        state.status = 'pending';
         state.error = null;
       })
       .addCase(asyncAddTodos.fulfilled, (state, action: PayloadAction<TodoListType>) => {
+        state.status = 'resolved';
         state.todos.push(...action.payload);
       })
       .addCase(asyncDeleteTodos.pending, (state) => {
-        state.status = 'pending';      
+        state.status = 'pending';
         state.error = null;
       })
       .addCase(asyncDeleteTodos.fulfilled, (state, action: PayloadAction<TodoListType>) => {
-        state.todos=state.todos.filter(todo=> !action.payload.some(deletedTodo=> deletedTodo.id===todo.id));
+        state.status = 'resolved';
+        state.todos = state.todos.filter(todo => !action.payload.some(deletedTodo => deletedTodo.id === todo.id));
       })
       .addCase(asyncCompleteTodos.pending, (state) => {
-        state.status = 'pending';      
+        state.status = 'pending';
         state.error = null;
       })
       .addCase(asyncCompleteTodos.fulfilled, (state, action: PayloadAction<TodoListType>) => {
+        state.status = 'resolved';
         state.todos.forEach((todo) => {
-          if (action.payload.some(comletedTodo=>comletedTodo.id===todo.id)) {
+          if (action.payload.some(comletedTodo => comletedTodo.id === todo.id)) {
             todo.status = 'done';
           }
         });
@@ -187,11 +195,12 @@ const todoSlice = createSlice({
           }
         });
       })
-      .addMatcher(setError, (state, action: PayloadAction<string>) => {
-        state.error = action.payload;
+      .addMatcher(setError, (state, action: AnyAction) => {
+        state.error = action.error.message.concat('','.');
         state.status = 'rejected';
       })
   }
 });
 
+export const {resetTodoError}=todoSlice.actions;
 export const { reducer: todoReducer } = todoSlice;

@@ -4,4 +4,4 @@
 
 **type:** educational project (Front End)
 
-**technologies used in the project: React, Redux Toolkit/AsyncThunk, React Router, TypeScript, MaterialUI, Webpack** 
+**technologies used in the project: React, Redux Toolkit/AsyncThunk, React Router, TypeScript, MaterialUI, Webpack, Axios, JSON Server** 

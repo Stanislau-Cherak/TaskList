@@ -1,24 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import { useAppSelector, useAppDispatch } from '../../hooks/hooks';
 
 import { showMessage } from '../../features/slices/MessageSlice';
-import { getTasks } from '../../features/slices/TaskSlice';
-import { getTodos } from '../../features/slices/TodoSlice';
+import { getTasks, resetTaskError } from '../../features/slices/TaskSlice';
+import { getTodos, resetTodoError } from '../../features/slices/TodoSlice';
 
 import { Container } from '@mui/material';
 
-import { getStateMessage } from '../../helpers/getState';
+import { getStateMessage, getStateTasks, getStateTodos } from '../../helpers/getState';
 
-import { PreFilterType } from '../../types/types';
+import { PreFilterType, AlertType } from '../../types/types';
 
 import Header from '../Header/Header';
 import Search from '../Search/Search';
 import RadioButtons from '../RadioButtons/RadioButtons';
 import WorkArea from '../WorkArea/WorkArea';
 import Snack from '../Snack/Snack';
-import CustomModal from "../CustomModal/CustomModal";
+import InputModal from '../Modal/InputModal';
+import AlertModal from '../Modal/AlertModal'
+import CustomBackdrop from '../CustomBackdrop/CustomBackdrop';
 
 import './App.scss';
 
@@ -28,9 +30,13 @@ const App: React.FC = () => {
 
     const message = useAppSelector(getStateMessage);
 
+    const firstRender = useRef<boolean>(true);
+
     const [preFilter, setPreFilter] = useState<PreFilterType>('all');
     const [searchMask, setSearchMask] = useState<string>('');
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const [alert, setAlert] = useState<AlertType>({ isAlert: false, alertMessage: '' });
 
     const preFilterChange = (value: PreFilterType): void => {
         setPreFilter(value);
@@ -40,18 +46,51 @@ const App: React.FC = () => {
         setSearchMask(value);
     }
 
-    const handleModalOpen = () => {
+    const handleModalOpen = (): void => {
         setIsModalOpen(true);
     }
 
-    const handleModalClose = () => {
+    const handleModalClose = (): void => {
         setIsModalOpen(false);
+    }
+
+    const handleAlertClose = (): void => {
+        dispatch(resetTaskError());
+        dispatch(resetTodoError());
+        setAlert({ isAlert: false, alertMessage: '' });
     }
 
     useEffect(() => {
         dispatch(getTasks());
         dispatch(getTodos());
     }, []);
+
+    const tasksStatus = useAppSelector(getStateTasks).status;
+    const todosStatus = useAppSelector(getStateTodos).status;
+    const taskAlert = useAppSelector(getStateTasks).error;
+    const todoAlert = useAppSelector(getStateTodos).error;
+
+    const isTaskAlert = (tasksStatus === 'rejected');
+    const isTodoAlert = (todosStatus === 'rejected');
+
+    const isTaskLoading = (tasksStatus === 'loading');
+    const isTodoLoading = (todosStatus === 'loading') || (todosStatus === 'pending');
+
+    useEffect(() => {
+        if (isTaskAlert || isTodoAlert) {
+            setAlert({ isAlert: true, alertMessage: `${taskAlert} ${todoAlert}` });
+        }
+    }, [isTaskAlert, isTodoAlert]);
+
+    useEffect(() => {
+        if (firstRender.current) {
+            firstRender.current = false;
+        } else if (loading && (!isTaskLoading || !isTodoLoading)) {
+            setLoading(false);
+        } else if (!loading && (isTaskLoading || isTodoLoading)) {
+            setLoading(true);        
+        }
+    }, [isTaskLoading, isTodoLoading]);
 
     return (
         <>
@@ -68,7 +107,9 @@ const App: React.FC = () => {
 
             </Container>
 
-            <CustomModal isOpen={isModalOpen} onClose={handleModalClose} />
+            <InputModal isOpen={isModalOpen} onClose={handleModalClose} />
+            <AlertModal isOpen={alert.isAlert} alertMessage={alert.alertMessage} onClose={handleAlertClose} />
+            <CustomBackdrop isOpen={loading} />
 
             <Snack
                 isOpen={message.show}

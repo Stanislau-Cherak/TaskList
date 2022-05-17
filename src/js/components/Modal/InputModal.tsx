@@ -19,12 +19,12 @@ const style = {
   alignItems: 'flex-end',
 };
 
-interface CustomModalProps {
+interface InputModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-const CustomModal: React.FC<CustomModalProps> = ({ isOpen, onClose }) => {
+const InputModal: React.FC<InputModalProps> = ({ isOpen, onClose }) => {
 
   return (
     <div>
@@ -55,4 +55,4 @@ const CustomModal: React.FC<CustomModalProps> = ({ isOpen, onClose }) => {
   );
 }
 
-export default CustomModal; 
+export default InputModal; 
